@@ -6,8 +6,61 @@ title: "Portfolio 1: Improving R Fluency"
 
 This project will produce a HTML that documents my process of learning to utilize R more fluidly. My goals are to 1) learn how to import a new dataset, 2) practice cleaning and filtering data, 3) practice creating new variables, 4) merge datasets, 5) create figures, 6) analyse and interpret simple correlations. Ultimately, I hope that this will provide the opportunity to practice and improve upon skills covered in the course's labs so far.  
 
-The data being used for this project is from the Open-Source Psychometrics Project, a website that offers psychometric assessments and provides raw data for public edification. Specifically, I will be utilizing data from the Short Dark Triad (SD3) (Paulhus and Jones, 2011) and the HEXACO Personality Inventory (Lee and Ashton, 2004).  adhttps://openpsychometrics.org/_rawdata/
+The data being used for this project is from the Open-Source Psychometrics Project, a website that offers psychometric assessments and provides raw data for public edification. Specifically, I will be utilizing data from the Short Dark Triad (SD3) (Paulhus and Jones, 2011) and the HEXACO Personality Inventory (Lee and Ashton, 2004). These measures were chosen as they are key constructs used in my thesis. adhttps://openpsychometrics.org/_rawdata/
 
-# Step 1: Importing Data 
+# Aim 1: Importing Data
+
+Option 1: File > Import Dataset > Select file type (here I chose Excel)
+```{r screenshot}
+knitr::include_graphics("C:/Users/crawhk23/Pictures/Data import.png")
+```
+
+Option 2: To link data sets to project by adding them to the GitHub file for the project > Click on data and click import data set
+```{r}
+library(tidyr)
+library(dplyr)
+```
+
+```{r screenshot2}
+knitr::include_graphics("C:/Users/crawhk23/Pictures/Importing via file.png")
+```
+# Aim 2: Cleaning and Filtering 
+
+```{r HexacoHH}
+HHData <- Hexaco_Data %>%
+  select(HSinc1:HSinc10, HFair1:HFair10, HGree1:HGree10, HMode1:HMode10)
+```
+This allows you to create a new dataset based on the variables in the select function# 
+
+```{r}
+SD3AvgsWorking <- SD3_Data %>%
+  mutate(
+    MAvg = rowMeans(across(M1:M9), na.rm = TRUE),
+    NAvg = rowMeans(across(N1:N9), na.rm = TRUE),
+    PAvg = rowMeans(across(P1:P9), na.rm = TRUE))
+```
+
+```{r}
+SD3Avgs <- SD3AvgsWorking  %>%
+  select(MAvg, NAvg, PAvg)
+```
+
+```{r}
+glimpse(SD3Avgs)
+```
+
+
+
+
+
+
+
+
+
+# Aim 3: Creating New varaibles
+# Aim 4: Merging 
+# Aim 5: Analyses and Figures 
+# Aim 6: Interpretation
+
 
 
