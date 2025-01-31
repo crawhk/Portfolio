@@ -4,7 +4,7 @@ title: "Portfolio 1: Improving R Fluency"
 
 # Project Description 
 
-This project will produce a HTML that documents my process of learning to utilize R more fluidly. My goals are to 1) learn how to import a new dataset, 2) practice cleaning and scoring data, 3) merge datasets, 4) create figures, 5) analyze and interpret simple correlations. Ultimately, I hope that this will provide the opportunity to practice and improve upon skills covered in the course's labs so far.  
+This project will produce a HTML that documents my process of learning to utilize R more fluidly. My goals are to 1) learn how to import a new dataset, 2) practice cleaning and scoring data, 3) run analyses 4) create figures and 5) interpret simple correlations. Ultimately, I hope that this will provide the opportunity to practice and improve upon skills covered in the course's labs so far.  
 
 The data being used for this project is from the Open-Source Psychometrics Project, a website that offers psychometric assessments and provides raw data for public edification. Specifically, I will be utilizing data from the Short Dark Triad (SD3) (Paulhus and Jones, 2011) and the HEXACO Personality Inventory (Lee and Ashton, 2004). These measures were chosen as they are key constructs used in my thesis. adhttps://openpsychometrics.org/_rawdata/
 
@@ -84,8 +84,29 @@ SD3Avgs <- SD3AvgsWorking  %>%
 ```{r}
 glimpse(SD3Avgs)
 ```
-# Aim 3: Merging 
-# Aim 4: Analyses and Figures 
+# Aim 3: Run Analyses
+Correlate between each of the Dark Triad components and each other (3x3) and the DT components and the total DT score. 
+
+```{r}
+install.packages("Hmisc")
+```
+```{r}
+library(Hmisc)
+rcorr(as.matrix(SD3Avgs))
+```
+Note: rcorr makes a corr matrix of both r and p values 
+
+```{r}
+library(Hmisc)
+rcorr(as.matrix(HHAvgs))
+```
+
+# Aim 4: Figures
+```{r}
+
+```
+
+
 # Aim 5: Interpretation
 
 
