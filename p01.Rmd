@@ -43,7 +43,7 @@ HHData <- Hexaco_Data %>%
 ```
 Note: This allows you to create a new dataset based on the variables in the select function 
 
-```{r HHAvgs}
+```{r HHAvgsworking}
 HHAvgsWorking <- HHData %>%
   mutate(
     HSincAvg = rowMeans(across(HSinc1:HSinc10), na.rm = TRUE),
@@ -61,7 +61,7 @@ HHAvgs <- HHAvgsWorking %>%
 
 Note: Creating dataset that includes only specified variables  
 
-```{r peak}
+```{r peak1}
 glimpse(HHAvgs)
 ```
 Note: Taking a peak at data structure
@@ -81,7 +81,7 @@ SD3Avgs <- SD3AvgsWorking  %>%
   select(MAvg, NAvg, PAvg, DTAvg)
 ```
 
-```{r peak}
+```{r peak2}
 glimpse(SD3Avgs)
 ```
 # Aim 3: Run Analyses
@@ -105,11 +105,14 @@ rcorr(as.matrix(HHAvgs))
 # Aim 4: Figures
 ```{r}
 library(ggplot2)
+library(tidyr)
 ```
+
 
 ```{r reshape}
 SD3Long <- SD3Avgs %>%
-  pivot_longer(cols = c("MAvg", "PAvg", "NAvg"), names_to = "Subcomponent", values_to = ("Value"))
+  pivot_longer(cols = c("MAvg", "PAvg", "NAvg"), names_to = "Subcomponent", values_to = "Value"
+  )
 
 ```
 
