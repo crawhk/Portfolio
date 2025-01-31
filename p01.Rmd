@@ -25,12 +25,12 @@ library(readxl)
 ```
 
 Load Data 
-```{r}
+```{r loadingdata}
 library(readxl)
 Hexaco_Data <- read_excel("Hexaco Data.xls")
 ```
 
-```{r}
+```{r loadingdata2}
 library(readxl)
 SD3_Data <- read_excel("SD3 Data.xls")
 ```
@@ -54,20 +54,20 @@ HHAvgsWorking <- HHData %>%
 ```
 Note: Creating new variables based on values for specified columns per observation#
 
-```{r}
+```{r HHAvgs}
 HHAvgs <- HHAvgsWorking %>%
   select(HSincAvg, HFairAvg, HGreeAvg, HModeAvg, HHAvg)
 ```
 
 Note: Creating dataset that includes only specified variables  
 
-```{r}
+```{r peak}
 glimpse(HHAvgs)
 ```
 Note: Taking a peak at data structure
 
 
-```{r}
+```{r SD3working}
 SD3AvgsWorking <- SD3_Data %>%
   mutate(
     MAvg = rowMeans(across(M1:M9), na.rm = TRUE),
@@ -76,20 +76,21 @@ SD3AvgsWorking <- SD3_Data %>%
     DTAvg = rowMeans(across(M1:P9), na.rm = TRUE))
 ```
 
-```{r}
+```{r SD3Avgs}
 SD3Avgs <- SD3AvgsWorking  %>%
   select(MAvg, NAvg, PAvg, DTAvg)
 ```
 
-```{r}
+```{r peak}
 glimpse(SD3Avgs)
 ```
 # Aim 3: Run Analyses
 Correlate between each of the Dark Triad components and each other (3x3) and the DT components and the total DT score. 
 
-```{r}
+```{r install}
 install.packages("Hmisc")
 ```
+
 ```{r}
 library(Hmisc)
 rcorr(as.matrix(SD3Avgs))
@@ -141,7 +142,7 @@ corrplot(cor(SD3Avgs))
 ```
 
 
-```{r}
+```{r plottingmandp}
 ggplot(SD3Avgs,
        aes(x = MAvg, 
            y = PAvg)) +
@@ -149,7 +150,7 @@ ggplot(SD3Avgs,
   labs(title = "Machiavellianism by Psychopathy", x = "Mach Average", y = "Psych Avg")
 ```
 
-```{r}
+```{r plotingpandn}
 ggplot(SD3Avgs,
        aes(x = PAvg, 
            y = NAvg)) +
@@ -157,16 +158,13 @@ ggplot(SD3Avgs,
   labs(title = "Psychopathy by Narcissism", x = "Psych Average", y = "Narc Avg")
 ```
 
-```{r}
+```{r plottingmandn}
 ggplot(SD3Avgs,
        aes(x = MAvg, 
            y = NAvg)) +
   geom_point()+
   labs(title = "Machiavellianism by Narcissism", x = "Mach Average", y = "Narc Avg")
 ```
-
-
-
 
 # Aim 5: Interpretation
 
