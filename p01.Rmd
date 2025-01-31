@@ -11,31 +11,37 @@ The data being used for this project is from the Open-Source Psychometrics Proje
 # Aim 1: Importing Data
 
 Option 1: File > Import Dataset > Select file type (here I chose Excel)
-```{r screenshot}
-knitr::include_graphics("C:/Users/crawhk23/Pictures/Data import.png")
-```
+![Importing Data Image 1](Data import.png)
 
 Option 2: To link data sets to project by adding them to the GitHub file for the project > Click on data and click import data set
 
-```{r screenshot2}
-knitr::include_graphics("C:/Users/crawhk23/Pictures/Importing via file.png")
-```
+![Importing Data Image 2](Importing via file.png)
 
 Load libraries 
 ```{r libs}
 library(tidyr)
 library(dplyr)
+library(readxl)
 ```
 
-Load Data
+Load Data 
+```{r}
+library(readxl)
+Hexaco_Data <- read_excel("Hexaco Data.xls")
+```
+
+```{r}
+library(readxl)
+SD3_Data <- read_excel("SD3 Data.xls")
+```
 
 # Aim 2: Cleaning and Scoring
 
 ```{r HexacoHH}
-HHData <- Hexaco_Data
+HHData <- Hexaco_Data %>% 
   select(HSinc1:HSinc10, HFair1:HFair10, HGree1:HGree10, HMode1:HMode10)
 ```
-This allows you to create a new dataset based on the variables in the select function# 
+Note: This allows you to create a new dataset based on the variables in the select function 
 
 ```{r HHAvgs}
 HHAvgsWorking <- HHData %>%
@@ -46,18 +52,19 @@ HHAvgsWorking <- HHData %>%
     HModeAvg = rowMeans(across(HMode1:HMode10), na.rm = TRUE),
     HHAvg = rowMeans(across(HSinc1:HMode10), na.rm = TRUE))
 ```
-Creating new variables based on values for specified columns per observation#
+Note: Creating new variables based on values for specified columns per observation#
 
 ```{r}
 HHAvgs <- HHAvgsWorking %>%
   select(HSincAvg, HFairAvg, HGreeAvg, HModeAvg, HHAvg)
 ```
-Creating dataset that includes only specified variables# 
+
+Note: Creating dataset that includes only specified variables  
 
 ```{r}
 glimpse(HHAvgs)
 ```
-Taking a peak at data structure#
+Note: Taking a peak at data structure
 
 
 ```{r}

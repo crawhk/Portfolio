@@ -299,20 +299,99 @@ $(document).ready(function () {
 <h1>Project Description</h1>
 <p>This project will produce a HTML that documents my process of
 learning to utilize R more fluidly. My goals are to 1) learn how to
-import a new dataset, 2) practice cleaning and filtering data, 3)
-practice creating new variables, 4) merge datasets, 5) create figures,
-6) analyse and interpret simple correlations. Ultimately, I hope that
-this will provide the opportunity to practice and improve upon skills
-covered in the course’s labs so far.</p>
+import a new dataset, 2) practice cleaning and scoring data, 3) merge
+datasets, 4) create figures, 5) analyze and interpret simple
+correlations. Ultimately, I hope that this will provide the opportunity
+to practice and improve upon skills covered in the course’s labs so
+far.</p>
 <p>The data being used for this project is from the Open-Source
 Psychometrics Project, a website that offers psychometric assessments
 and provides raw data for public edification. Specifically, I will be
 utilizing data from the Short Dark Triad (SD3) (Paulhus and Jones, 2011)
-and the HEXACO Personality Inventory (Lee and Ashton, 2004).
+and the HEXACO Personality Inventory (Lee and Ashton, 2004). These
+measures were chosen as they are key constructs used in my thesis.
 adhttps://openpsychometrics.org/_rawdata/</p>
 </div>
-<div id="step-1-importing-data" class="section level1">
-<h1>Step 1: Importing Data</h1>
+<div id="aim-1-importing-data" class="section level1">
+<h1>Aim 1: Importing Data</h1>
+<p>Option 1: File &gt; Import Dataset &gt; Select file type (here I
+chose Excel) <img src="Data%20import.png"
+alt="Importing Data Image 1" /></p>
+<p>Option 2: To link data sets to project by adding them to the GitHub
+file for the project &gt; Click on data and click import data set</p>
+<div class="float">
+<img src="Importing%20via%20file.png" alt="Importing Data Image 2" />
+<div class="figcaption">Importing Data Image 2</div>
+</div>
+<p>Load libraries</p>
+<pre class="r"><code>library(tidyr)
+library(dplyr)</code></pre>
+<pre><code>## 
+## Attaching package: &#39;dplyr&#39;</code></pre>
+<pre><code>## The following objects are masked from &#39;package:stats&#39;:
+## 
+##     filter, lag</code></pre>
+<pre><code>## The following objects are masked from &#39;package:base&#39;:
+## 
+##     intersect, setdiff, setequal, union</code></pre>
+<pre class="r"><code>library(readxl)</code></pre>
+<p>Load Data</p>
+<pre class="r"><code>library(readxl)
+Hexaco_Data &lt;- read_excel(&quot;Hexaco Data.xls&quot;)</code></pre>
+<pre class="r"><code>library(readxl)
+SD3_Data &lt;- read_excel(&quot;SD3 Data.xls&quot;)</code></pre>
+</div>
+<div id="aim-2-cleaning-and-scoring" class="section level1">
+<h1>Aim 2: Cleaning and Scoring</h1>
+<pre class="r"><code>HHData &lt;- Hexaco_Data %&gt;% 
+  select(HSinc1:HSinc10, HFair1:HFair10, HGree1:HGree10, HMode1:HMode10)</code></pre>
+<p>Note: This allows you to create a new dataset based on the variables
+in the select function</p>
+<pre class="r"><code>HHAvgsWorking &lt;- HHData %&gt;%
+  mutate(
+    HSincAvg = rowMeans(across(HSinc1:HSinc10), na.rm = TRUE),
+    HFairAvg = rowMeans(across(HFair1:HFair10), na.rm = TRUE),
+    HGreeAvg = rowMeans(across(HGree1:HGree10), na.rm = TRUE),
+    HModeAvg = rowMeans(across(HMode1:HMode10), na.rm = TRUE),
+    HHAvg = rowMeans(across(HSinc1:HMode10), na.rm = TRUE))</code></pre>
+<p>Note: Creating new variables based on values for specified columns
+per observation#</p>
+<pre class="r"><code>HHAvgs &lt;- HHAvgsWorking %&gt;%
+  select(HSincAvg, HFairAvg, HGreeAvg, HModeAvg, HHAvg)</code></pre>
+<p>Note: Creating dataset that includes only specified variables</p>
+<pre class="r"><code>glimpse(HHAvgs)</code></pre>
+<pre><code>## Rows: 22,786
+## Columns: 5
+## $ HSincAvg &lt;dbl&gt; 3.8, 5.2, 4.7, 4.3, 3.5, 4.8, 4.1, 4.2, 3.2, 3.2, 3.5, 3.2, 3…
+## $ HFairAvg &lt;dbl&gt; 4.1, 3.7, 4.5, 3.8, 4.6, 4.4, 4.0, 3.9, 3.5, 3.7, 3.3, 3.7, 3…
+## $ HGreeAvg &lt;dbl&gt; 3.1, 4.7, 4.2, 4.3, 3.9, 4.5, 4.3, 4.4, 2.8, 4.3, 3.4, 3.8, 3…
+## $ HModeAvg &lt;dbl&gt; 4.7, 3.4, 4.1, 3.8, 4.0, 4.7, 4.0, 5.4, 3.9, 4.6, 3.6, 3.3, 2…
+## $ HHAvg    &lt;dbl&gt; 3.925, 4.250, 4.375, 4.050, 4.000, 4.600, 4.100, 4.475, 3.350…</code></pre>
+<p>Note: Taking a peak at data structure</p>
+<pre class="r"><code>SD3AvgsWorking &lt;- SD3_Data %&gt;%
+  mutate(
+    MAvg = rowMeans(across(M1:M9), na.rm = TRUE),
+    NAvg = rowMeans(across(N1:N9), na.rm = TRUE),
+    PAvg = rowMeans(across(P1:P9), na.rm = TRUE),
+    DTAvg = rowMeans(across(M1:P9), na.rm = TRUE))</code></pre>
+<pre class="r"><code>SD3Avgs &lt;- SD3AvgsWorking  %&gt;%
+  select(MAvg, NAvg, PAvg, DTAvg)</code></pre>
+<pre class="r"><code>glimpse(SD3Avgs)</code></pre>
+<pre><code>## Rows: 18,192
+## Columns: 4
+## $ MAvg  &lt;dbl&gt; 3.888889, 2.222222, 3.222222, 4.888889, 3.777778, 2.888889, 3.77…
+## $ NAvg  &lt;dbl&gt; 3.111111, 2.888889, 2.888889, 3.666667, 3.333333, 2.888889, 3.44…
+## $ PAvg  &lt;dbl&gt; 3.555556, 2.555556, 2.444444, 3.777778, 3.333333, 3.000000, 3.22…
+## $ DTAvg &lt;dbl&gt; 3.518519, 2.555556, 2.851852, 4.111111, 3.481481, 2.925926, 3.48…</code></pre>
+</div>
+<div id="aim-3-merging" class="section level1">
+<h1>Aim 3: Merging</h1>
+</div>
+<div id="aim-4-analyses-and-figures" class="section level1">
+<h1>Aim 4: Analyses and Figures</h1>
+</div>
+<div id="aim-5-interpretation" class="section level1">
+<h1>Aim 5: Interpretation</h1>
 </div>
 
 
