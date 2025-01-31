@@ -103,8 +103,69 @@ rcorr(as.matrix(HHAvgs))
 
 # Aim 4: Figures
 ```{r}
+library(ggplot2)
+```
+
+```{r reshape}
+SD3Long <- SD3Avgs %>%
+  pivot_longer(cols = c("MAvg", "PAvg", "NAvg"), names_to = "Subcomponent", values_to = ("Value"))
 
 ```
+
+```{r}
+install.packages("viridis")
+```
+```{r}
+library(viridis)
+```
+
+
+```{r}
+ggplot(SD3Long,
+       aes(x = DTAvg, 
+           y = Value, color = Subcomponent)) +
+  geom_point()+
+  labs(title = "DT by Subcomponents", x = "DT Average", y = "Value", color = "Subcomponent" ) + 
+  scale_color_viridis_d()
+```
+```{r}
+install.packages("corrplot")
+```
+
+```{r}
+library(corrplot)
+```
+
+```{r}
+corrplot(cor(SD3Avgs))
+```
+
+
+```{r}
+ggplot(SD3Avgs,
+       aes(x = MAvg, 
+           y = PAvg)) +
+  geom_point()+
+  labs(title = "Machiavellianism by Psychopathy", x = "Mach Average", y = "Psych Avg")
+```
+
+```{r}
+ggplot(SD3Avgs,
+       aes(x = PAvg, 
+           y = NAvg)) +
+  geom_point()+
+  labs(title = "Psychopathy by Narcissism", x = "Psych Average", y = "Narc Avg")
+```
+
+```{r}
+ggplot(SD3Avgs,
+       aes(x = MAvg, 
+           y = NAvg)) +
+  geom_point()+
+  labs(title = "Machiavellianism by Narcissism", x = "Mach Average", y = "Narc Avg")
+```
+
+
 
 
 # Aim 5: Interpretation
