@@ -169,11 +169,11 @@ ggplot(SD3Avgs,
 ```
 
 # Aim 5: Interpretation
-The DT traits are empirically related to each other. Previous findings suggest that P and N are highly correlated (r = .5), P and M are moderately correlated (r = .31), and N and M are moderately correlated (r = .25), all correlations are significant (Paulhus & Williams, 2002). Furthermore, in a large meta-analytic review, Muris and colleagues (2017) found that moderate to high relationships between the DT factors emerge across the most commonly used assessments of the DT. P and N emerged as moderately correlated (r = .38), P and M emerged as strongly correlated (r = .58), and N and M emerged as moderately correlated (r = .34)(Muris et al., 2017).
+The DT traits are empirically related to each other. Previous findings suggest that P and N are highly correlated (r = .5), P and M are moderately correlated (r = .31), and N and M are moderately correlated (r = .25), all correlations are significant (Paulhus & Williams, 2002). Furthermore, in a large meta-analytic review, Muris and colleagues (2017) found that moderate to high relationships between the DT factors emerge across the most commonly used assessments of the DT. P and N emerged as moderately correlated (r = .38), P and M emerged as strongly correlated (r = .58), and N and M emerged as moderately correlated (r = .34) (Muris et al., 2017).
 
-The current results are as followed:
-  - M and P (r = .72) mod to strong   
-  - M and N (r = .47) mod 
-  - P and N (r = .45) mod
+The current results are as followed:  
+- M and P (r = .72) mod to strong  
+- M and N (r = .47) mod  
+- P and N (r = .45) mod
 
 In alignment with previous studies, the correlations between M and N as well as P and N are moderate. However, the current results suggest that the correlation between M and P are much higher than previous studies suggest. 
