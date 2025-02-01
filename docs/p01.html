@@ -299,11 +299,10 @@ $(document).ready(function () {
 <h1>Project Description</h1>
 <p>This project will produce a HTML that documents my process of
 learning to utilize R more fluidly. My goals are to 1) learn how to
-import a new dataset, 2) practice cleaning and scoring data, 3) merge
-datasets, 4) create figures, 5) analyze and interpret simple
-correlations. Ultimately, I hope that this will provide the opportunity
-to practice and improve upon skills covered in the course’s labs so
-far.</p>
+import a new dataset, 2) practice cleaning and scoring data, 3) run
+analyses 4) create figures and 5) interpret simple correlations.
+Ultimately, I hope that this will provide the opportunity to practice
+and improve upon skills covered in the course’s labs so far.</p>
 <p>The data being used for this project is from the Open-Source
 Psychometrics Project, a website that offers psychometric assessments
 and provides raw data for public edification. Specifically, I will be
@@ -335,6 +334,7 @@ library(dplyr)</code></pre>
 ## 
 ##     intersect, setdiff, setequal, union</code></pre>
 <pre class="r"><code>library(readxl)</code></pre>
+<pre class="r"><code>options(repos = c(CRAN = &quot;https://cloud.r-project.org/&quot;))</code></pre>
 <p>Load Data</p>
 <pre class="r"><code>library(readxl)
 Hexaco_Data &lt;- read_excel(&quot;Hexaco Data.xls&quot;)</code></pre>
@@ -384,11 +384,108 @@ per observation#</p>
 ## $ PAvg  &lt;dbl&gt; 3.555556, 2.555556, 2.444444, 3.777778, 3.333333, 3.000000, 3.22…
 ## $ DTAvg &lt;dbl&gt; 3.518519, 2.555556, 2.851852, 4.111111, 3.481481, 2.925926, 3.48…</code></pre>
 </div>
-<div id="aim-3-merging" class="section level1">
-<h1>Aim 3: Merging</h1>
+<div id="aim-3-run-analyses" class="section level1">
+<h1>Aim 3: Run Analyses</h1>
+<p>Correlate between each of the Dark Triad components and each other
+(3x3) and the DT components and the total DT score.</p>
+<pre class="r"><code>library(Hmisc)</code></pre>
+<pre><code>## 
+## Attaching package: &#39;Hmisc&#39;</code></pre>
+<pre><code>## The following objects are masked from &#39;package:dplyr&#39;:
+## 
+##     src, summarize</code></pre>
+<pre><code>## The following objects are masked from &#39;package:base&#39;:
+## 
+##     format.pval, units</code></pre>
+<pre class="r"><code>rcorr(as.matrix(SD3Avgs))</code></pre>
+<pre><code>##       MAvg NAvg PAvg DTAvg
+## MAvg  1.00 0.47 0.72  0.92
+## NAvg  0.47 1.00 0.45  0.70
+## PAvg  0.72 0.45 1.00  0.88
+## DTAvg 0.92 0.70 0.88  1.00
+## 
+## n= 18192 
+## 
+## 
+## P
+##       MAvg NAvg PAvg DTAvg
+## MAvg        0    0    0   
+## NAvg   0         0    0   
+## PAvg   0    0         0   
+## DTAvg  0    0    0</code></pre>
+<p>Note: rcorr makes a corr matrix of both r and p values</p>
+<pre class="r"><code>library(Hmisc)
+rcorr(as.matrix(HHAvgs))</code></pre>
+<pre><code>##          HSincAvg HFairAvg HGreeAvg HModeAvg HHAvg
+## HSincAvg     1.00     0.31     0.50     0.40  0.81
+## HFairAvg     0.31     1.00     0.23     0.24  0.53
+## HGreeAvg     0.50     0.23     1.00     0.43  0.78
+## HModeAvg     0.40     0.24     0.43     1.00  0.71
+## HHAvg        0.81     0.53     0.78     0.71  1.00
+## 
+## n= 22786 
+## 
+## 
+## P
+##          HSincAvg HFairAvg HGreeAvg HModeAvg HHAvg
+## HSincAvg           0        0        0        0   
+## HFairAvg  0                 0        0        0   
+## HGreeAvg  0        0                 0        0   
+## HModeAvg  0        0        0                 0   
+## HHAvg     0        0        0        0</code></pre>
 </div>
-<div id="aim-4-analyses-and-figures" class="section level1">
-<h1>Aim 4: Analyses and Figures</h1>
+<div id="aim-4-figures" class="section level1">
+<h1>Aim 4: Figures</h1>
+<pre class="r"><code>library(ggplot2)
+library(tidyr)</code></pre>
+<pre class="r"><code>SD3Long &lt;- SD3Avgs %&gt;%
+  pivot_longer(cols = c(&quot;MAvg&quot;, &quot;PAvg&quot;, &quot;NAvg&quot;), names_to = &quot;Subcomponent&quot;, values_to = &quot;Value&quot;
+  )</code></pre>
+<pre class="r"><code>install.packages(&quot;viridis&quot;)</code></pre>
+<pre><code>## Installing package into &#39;C:/Users/crawhk23/AppData/Local/R/win-library/4.4&#39;
+## (as &#39;lib&#39; is unspecified)</code></pre>
+<pre><code>## package &#39;viridis&#39; successfully unpacked and MD5 sums checked
+## 
+## The downloaded binary packages are in
+##  C:\Users\crawhk23\AppData\Local\Temp\Rtmpsf5pzq\downloaded_packages</code></pre>
+<pre class="r"><code>library(viridis)</code></pre>
+<pre><code>## Loading required package: viridisLite</code></pre>
+<pre class="r"><code>ggplot(SD3Long,
+       aes(x = DTAvg, 
+           y = Value, color = Subcomponent)) +
+  geom_point()+
+  labs(title = &quot;DT by Subcomponents&quot;, x = &quot;DT Average&quot;, y = &quot;Value&quot;, color = &quot;Subcomponent&quot; ) + 
+  scale_color_viridis_d()</code></pre>
+<p><img src="p01_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<pre class="r"><code>install.packages(&quot;corrplot&quot;)</code></pre>
+<pre><code>## Installing package into &#39;C:/Users/crawhk23/AppData/Local/R/win-library/4.4&#39;
+## (as &#39;lib&#39; is unspecified)</code></pre>
+<pre><code>## package &#39;corrplot&#39; successfully unpacked and MD5 sums checked
+## 
+## The downloaded binary packages are in
+##  C:\Users\crawhk23\AppData\Local\Temp\Rtmpsf5pzq\downloaded_packages</code></pre>
+<pre class="r"><code>library(corrplot)</code></pre>
+<pre><code>## corrplot 0.95 loaded</code></pre>
+<pre class="r"><code>corrplot(cor(SD3Avgs))</code></pre>
+<p><img src="p01_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<pre class="r"><code>ggplot(SD3Avgs,
+       aes(x = MAvg, 
+           y = PAvg)) +
+  geom_point()+
+  labs(title = &quot;Machiavellianism by Psychopathy&quot;, x = &quot;Mach Average&quot;, y = &quot;Psych Avg&quot;)</code></pre>
+<p><img src="p01_files/figure-html/plottingmandp-1.png" width="672" /></p>
+<pre class="r"><code>ggplot(SD3Avgs,
+       aes(x = PAvg, 
+           y = NAvg)) +
+  geom_point()+
+  labs(title = &quot;Psychopathy by Narcissism&quot;, x = &quot;Psych Average&quot;, y = &quot;Narc Avg&quot;)</code></pre>
+<p><img src="p01_files/figure-html/plotingpandn-1.png" width="672" /></p>
+<pre class="r"><code>ggplot(SD3Avgs,
+       aes(x = MAvg, 
+           y = NAvg)) +
+  geom_point()+
+  labs(title = &quot;Machiavellianism by Narcissism&quot;, x = &quot;Mach Average&quot;, y = &quot;Narc Avg&quot;)</code></pre>
+<p><img src="p01_files/figure-html/plottingmandn-1.png" width="672" /></p>
 </div>
 <div id="aim-5-interpretation" class="section level1">
 <h1>Aim 5: Interpretation</h1>
