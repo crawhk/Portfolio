@@ -88,6 +88,7 @@ glimpse(SD3Avgs)
 Correlate between each of the Dark Triad components and each other (3x3) and the DT components and the total DT score. 
 
 ```{r install}
+chooseCRANmirror()
 install.packages("Hmisc")
 ```
 
