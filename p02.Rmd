@@ -12,7 +12,7 @@ The haven package allows you to read in SPSS data
 ```{r loadhaven}
 library(haven)
 library(tidyr)
-library(dplyr)
+library(tidyverse)
 ```
 
 
@@ -34,10 +34,24 @@ AIAvgs <- AI %>%
 ```
 
 ```{r}
-glimpse(AIAvgs)
+print(AIAvgs)
 ```
 
 ```{r plotting}
+ggplot(AIAvgs, aes(x = Scale)) +
+  geom_line(aes(y = Actual, group = 1, linetype = "Actual Scores")) +
+  geom_line(aes(y = ExpertAvg, group = 2, linetype = "Expert Rater Predictions")) +
+  geom_line(aes(y = AIAvg, group = 3, linetype = "AI Predictions")) +
+  labs(title = "Truthful Communication Scale Validation",
+       x = "Criterion Scale", linetype = "Rater")+ 
+  theme_minimal() +
+  theme(
+    panel.grid = element_blank(),
+    panel.background = element_blank(),
+    axis.line = element_line(),
+    axis.ticks = element_line(),
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    plot.margin = margin(10, 5, 10, 5))
 
 
 ```
