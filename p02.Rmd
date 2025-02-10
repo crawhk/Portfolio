@@ -1,5 +1,44 @@
 ---
-title: "Portfolio 2"
+title: "Portfolio 2: TComm AI Graph"
 ---
 
-> The projects should be numbered consecutively (i.e., in the order in which you began them), and should include for each project a description of the goal, the product (computer program, hand graph, computer graph, etc.), the data, and some interpretation. Reports must be reproducible and of high quality in terms of writing, grammar, presentation, etc.
+> The goal of this project is to create a graph for my AI research. Specifically, the graph will display our results for our QCV Truthful Communication Scale Validation project. The graph should replicate a line graph created by Mike that has predictions (correlations) along the y-axis and the criterion variables on the x-axis. I will use this graph in my poster at an upcoming conference! 
+
+```{r installhaven}
+#install.packages("haven")
+```
+The haven package allows you to read in SPSS data
+
+```{r loadhaven}
+library(haven)
+library(tidyr)
+library(dplyr)
+```
+
+
+```{r reading data}
+AI <- read_spss("C:/Users/crawhk23/Documents/GitHub/Portfolio/TComm AI & Human SS (Names and No Names).sav")
+```
+
+```{r}
+print(AI)
+```
+
+```{r creatingmeans}
+AIAvgs <- AI %>%  
+  mutate(
+    ExpertAvg = rowMeans(across(mf:es), na.rm = TRUE),
+    AIAvg= rowMeans(across(AI1:AI6), na.rm = TRUE)
+    )
+
+```
+
+```{r}
+glimpse(AIAvgs)
+```
+
+```{r plotting}
+
+
+```
+
