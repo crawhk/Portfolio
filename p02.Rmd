@@ -54,7 +54,11 @@ ggplot(AIAvgs, aes(x = Scale)) +
 scale_y_continuous(limits = c(-1, 1), breaks = seq(-1, 1, by = 0.2))
 
 ```
-R translation 
+  
+  
+  R translation 
+
+
 ggplot(AIAvgs, aes(x = Scale)) + --> creating a plot with x axis denoting scale
 
   geom_line(aes(y = Actual, group = 1, linetype = "Actual Scores")) +

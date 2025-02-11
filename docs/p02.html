@@ -373,6 +373,24 @@ library(tidyverse)</code></pre>
     axis.text.x = element_text(angle = 45, hjust = 1)) + 
 scale_y_continuous(limits = c(-1, 1), breaks = seq(-1, 1, by = 0.2))</code></pre>
 <p><img src="p02_files/figure-html/plotting-1.png" width="672" /></p>
+<p>R translation</p>
+<p>ggplot(AIAvgs, aes(x = Scale)) + –&gt; creating a plot with x axis
+denoting scale</p>
+<p>geom_line(aes(y = Actual, group = 1, linetype = “Actual Scores”)) +
+geom_line(aes(y = ExpertAvg, group = 2, linetype = “Expert Rater
+Predictions”)) + geom_line(aes(y = AIAvg, group = 3, linetype = “AI
+Predictions”)) –&gt; these lines are plotting the data for each group
+with the linetype varying by group</p>
+<p>labs(title = “Truthful Communication Scale Validation”, x =
+“Criterion Scale”, linetype = “Rater”, y= “Correlations”)+ –&gt;
+labeling the axes and key</p>
+<p>theme_minimal() + theme( panel.grid = element_blank(),
+panel.background = element_blank(), axis.line = element_line(),
+axis.ticks = element_line(), axis.text.x = element_text(angle = 45,
+hjust = 1)) + scale_y_continuous(limits = c(-1, 1), breaks = seq(-1, 1,
+by = 0.2)) –&gt; adjusting theme to a white background, no grid or
+lines, and ticks every .2</p>
+<p>Replicated graph!</p>
 
 
 
