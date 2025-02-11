@@ -43,15 +43,15 @@ ggplot(AIAvgs, aes(x = Scale)) +
   geom_line(aes(y = ExpertAvg, group = 2, linetype = "Expert Rater Predictions")) +
   geom_line(aes(y = AIAvg, group = 3, linetype = "AI Predictions")) +
   labs(title = "Truthful Communication Scale Validation",
-       x = "Criterion Scale", linetype = "Rater")+ 
+       x = "Criterion Scale", linetype = "Rater", y= "Correlations")+ 
   theme_minimal() +
   theme(
     panel.grid = element_blank(),
     panel.background = element_blank(),
     axis.line = element_line(),
     axis.ticks = element_line(),
-    axis.text.x = element_text(angle = 45, hjust = 1),
-    plot.margin = margin(10, 5, 10, 5))
+    axis.text.x = element_text(angle = 45, hjust = 1)) + 
+scale_y_continuous(limits = c(-1, 1), breaks = seq(-1, 1, by = 0.2))
 
 
 ```
