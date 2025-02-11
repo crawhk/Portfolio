@@ -53,6 +53,25 @@ ggplot(AIAvgs, aes(x = Scale)) +
     axis.text.x = element_text(angle = 45, hjust = 1)) + 
 scale_y_continuous(limits = c(-1, 1), breaks = seq(-1, 1, by = 0.2))
 
-
 ```
+R translation 
+ggplot(AIAvgs, aes(x = Scale)) + --> creating a plot with x axis denoting scale
+
+  geom_line(aes(y = Actual, group = 1, linetype = "Actual Scores")) +
+  geom_line(aes(y = ExpertAvg, group = 2, linetype = "Expert Rater Predictions")) +
+  geom_line(aes(y = AIAvg, group = 3, linetype = "AI Predictions")) --> these lines are plotting the data for each group with the linetype varying by group
+  
+  labs(title = "Truthful Communication Scale Validation",
+       x = "Criterion Scale", linetype = "Rater", y= "Correlations")+ --> labeling the axes and key 
+       
+  theme_minimal() +
+  theme(
+    panel.grid = element_blank(),
+    panel.background = element_blank(),
+    axis.line = element_line(),
+    axis.ticks = element_line(),
+    axis.text.x = element_text(angle = 45, hjust = 1)) + 
+scale_y_continuous(limits = c(-1, 1), breaks = seq(-1, 1, by = 0.2)) --> adjusting theme to a white background, no grid or lines, and ticks every .2
+
+Replicated graph! 
 

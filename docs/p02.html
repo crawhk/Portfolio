@@ -11,9 +11,9 @@
 
 
 
-<title>Portfolio 2</title>
+<title>Portfolio 2: TComm AI Graph</title>
 
-<script src="site_libs/header-attrs-2.13/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.29/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
@@ -141,11 +141,15 @@ $(document).ready(function () {
     href = "index.html";
   var menuAnchor = $('a[href="' + href + '"]');
 
-  // mark it active
-  menuAnchor.tab('show');
-
-  // if it's got a parent navbar menu mark it active as well
-  menuAnchor.closest('li.dropdown').addClass('active');
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
 
   // Navbar adjustments
   var navHeight = $(".navbar").first().height() + 15;
@@ -174,8 +178,8 @@ $(document).ready(function () {
   border-radius: 4px;
 }
 
-.tabset-dropdown > .nav-tabs > li.active:before {
-  content: "";
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
   font-family: 'Glyphicons Halflings';
   display: inline-block;
   padding: 10px;
@@ -183,16 +187,9 @@ $(document).ready(function () {
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
-  content: "&#xe258;";
-  border: none;
-}
-
-.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
-  content: "";
+  content: "\e258";
   font-family: 'Glyphicons Halflings';
-  display: inline-block;
-  padding: 10px;
-  border-right: 1px solid #ddd;
+  border: none;
 }
 
 .tabset-dropdown > .nav-tabs > li.active {
@@ -293,18 +290,89 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">Portfolio 2</h1>
+<h1 class="title toc-ignore">Portfolio 2: TComm AI Graph</h1>
 
 </div>
 
 
 <blockquote>
-<p>The projects should be numbered consecutively (i.e., in the order in
-which you began them), and should include for each project a description
-of the goal, the product (computer program, hand graph, computer graph,
-etc.), the data, and some interpretation. Reports must be reproducible
-and of high quality in terms of writing, grammar, presentation, etc.</p>
+<p>The goal of this project is to create a graph for my AI research.
+Specifically, the graph will display our results for our QCV Truthful
+Communication Scale Validation project. The graph should replicate a
+line graph created by Mike that has predictions (correlations) along the
+y-axis and the criterion variables on the x-axis. I will use this graph
+in my poster at an upcoming conference!</p>
 </blockquote>
+<pre class="r"><code>#install.packages(&quot;haven&quot;)</code></pre>
+<p>The haven package allows you to read in SPSS data</p>
+<pre class="r"><code>library(haven)
+library(tidyr)
+library(tidyverse)</code></pre>
+<pre><code>## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+## ✔ dplyr     1.1.4     ✔ purrr     1.0.2
+## ✔ forcats   1.0.0     ✔ readr     2.1.5
+## ✔ ggplot2   3.5.1     ✔ stringr   1.5.1
+## ✔ lubridate 1.9.4     ✔ tibble    3.2.1
+## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+## ✖ dplyr::filter() masks stats::filter()
+## ✖ dplyr::lag()    masks stats::lag()
+## ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+<pre class="r"><code>AI &lt;- read_spss(&quot;C:/Users/crawhk23/Documents/GitHub/Portfolio/TComm AI &amp; Human SS (Names and No Names).sav&quot;)</code></pre>
+<pre class="r"><code>print(AI)</code></pre>
+<pre><code>## # A tibble: 32 × 21
+##    ScaleNum Scale     mf    cs    cr    ej    wf    es  Actual   AI1   AI2   AI3
+##       &lt;dbl&gt; &lt;chr&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+##  1        1 Exter…  0.65  0.65   0.4  0.5   0.5   0.65  0.397   0.7   0.7   0.75
+##  2        2 Reyso…  0.65  0.7    0.5  0.55  0.6   0.65  0.551   0.75  0.75  0.8 
+##  3        3 SPI-H…  0.55  0.7    0.5  0.5   0.55  0.7   0.615   0.7   0.7   0.75
+##  4        4 CIVIC…  0.6   0.7    0.3  0.55  0.4   0.8   0.434   0.65  0.65  0.7 
+##  5        5 CIVIC…  0     0.1    0.1  0.15  0     0     0.0989  0.1   0.1   0.2 
+##  6        6 CIVIC…  0     0.2    0    0.1   0     0     0.0435  0.05  0.05  0.1 
+##  7        7 VIA I…  0.6   0.5    0.2  0.3   0.35  0.7   0.549   0.7   0.7   0.8 
+##  8        8 Realn…  0.7   0.75   0.1  0.4   0.3   0.8   0.486   0.65  0.6   0.7 
+##  9        9 Authe…  0.5   0.6    0.2  0.4   0.25  0.65  0.448   0.6   0.55  0.65
+## 10       10 Authe… -0.2  -0.45   0   -0.3   0.1  -0.3  -0.217  -0.4  -0.4  -0.4 
+## # ℹ 22 more rows
+## # ℹ 9 more variables: AI4 &lt;dbl&gt;, AI5 &lt;dbl&gt;, AI6 &lt;dbl&gt;, AI_NN1 &lt;dbl&gt;,
+## #   AI_NN2 &lt;dbl&gt;, AI_NN3 &lt;dbl&gt;, AI_NN4 &lt;dbl&gt;, AI_NN5 &lt;dbl&gt;, AI_NN6 &lt;dbl&gt;</code></pre>
+<pre class="r"><code>AIAvgs &lt;- AI %&gt;%  
+  mutate(
+    ExpertAvg = rowMeans(across(mf:es), na.rm = TRUE),
+    AIAvg= rowMeans(across(AI1:AI6), na.rm = TRUE)
+    )</code></pre>
+<pre class="r"><code>print(AIAvgs)</code></pre>
+<pre><code>## # A tibble: 32 × 23
+##    ScaleNum Scale     mf    cs    cr    ej    wf    es  Actual   AI1   AI2   AI3
+##       &lt;dbl&gt; &lt;chr&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+##  1        1 Exter…  0.65  0.65   0.4  0.5   0.5   0.65  0.397   0.7   0.7   0.75
+##  2        2 Reyso…  0.65  0.7    0.5  0.55  0.6   0.65  0.551   0.75  0.75  0.8 
+##  3        3 SPI-H…  0.55  0.7    0.5  0.5   0.55  0.7   0.615   0.7   0.7   0.75
+##  4        4 CIVIC…  0.6   0.7    0.3  0.55  0.4   0.8   0.434   0.65  0.65  0.7 
+##  5        5 CIVIC…  0     0.1    0.1  0.15  0     0     0.0989  0.1   0.1   0.2 
+##  6        6 CIVIC…  0     0.2    0    0.1   0     0     0.0435  0.05  0.05  0.1 
+##  7        7 VIA I…  0.6   0.5    0.2  0.3   0.35  0.7   0.549   0.7   0.7   0.8 
+##  8        8 Realn…  0.7   0.75   0.1  0.4   0.3   0.8   0.486   0.65  0.6   0.7 
+##  9        9 Authe…  0.5   0.6    0.2  0.4   0.25  0.65  0.448   0.6   0.55  0.65
+## 10       10 Authe… -0.2  -0.45   0   -0.3   0.1  -0.3  -0.217  -0.4  -0.4  -0.4 
+## # ℹ 22 more rows
+## # ℹ 11 more variables: AI4 &lt;dbl&gt;, AI5 &lt;dbl&gt;, AI6 &lt;dbl&gt;, AI_NN1 &lt;dbl&gt;,
+## #   AI_NN2 &lt;dbl&gt;, AI_NN3 &lt;dbl&gt;, AI_NN4 &lt;dbl&gt;, AI_NN5 &lt;dbl&gt;, AI_NN6 &lt;dbl&gt;,
+## #   ExpertAvg &lt;dbl&gt;, AIAvg &lt;dbl&gt;</code></pre>
+<pre class="r"><code>ggplot(AIAvgs, aes(x = Scale)) +
+  geom_line(aes(y = Actual, group = 1, linetype = &quot;Actual Scores&quot;)) +
+  geom_line(aes(y = ExpertAvg, group = 2, linetype = &quot;Expert Rater Predictions&quot;)) +
+  geom_line(aes(y = AIAvg, group = 3, linetype = &quot;AI Predictions&quot;)) +
+  labs(title = &quot;Truthful Communication Scale Validation&quot;,
+       x = &quot;Criterion Scale&quot;, linetype = &quot;Rater&quot;, y= &quot;Correlations&quot;)+ 
+  theme_minimal() +
+  theme(
+    panel.grid = element_blank(),
+    panel.background = element_blank(),
+    axis.line = element_line(),
+    axis.ticks = element_line(),
+    axis.text.x = element_text(angle = 45, hjust = 1)) + 
+scale_y_continuous(limits = c(-1, 1), breaks = seq(-1, 1, by = 0.2))</code></pre>
+<p><img src="p02_files/figure-html/plotting-1.png" width="672" /></p>
 
 
 
