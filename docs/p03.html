@@ -11,9 +11,9 @@
 
 
 
-<title>Portfolio 3</title>
+<title>Portfolio 3 - Feeding my Titanic Obsession</title>
 
-<script src="site_libs/header-attrs-2.13/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.29/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
@@ -141,11 +141,15 @@ $(document).ready(function () {
     href = "index.html";
   var menuAnchor = $('a[href="' + href + '"]');
 
-  // mark it active
-  menuAnchor.tab('show');
-
-  // if it's got a parent navbar menu mark it active as well
-  menuAnchor.closest('li.dropdown').addClass('active');
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
 
   // Navbar adjustments
   var navHeight = $(".navbar").first().height() + 15;
@@ -174,8 +178,8 @@ $(document).ready(function () {
   border-radius: 4px;
 }
 
-.tabset-dropdown > .nav-tabs > li.active:before {
-  content: "";
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
   font-family: 'Glyphicons Halflings';
   display: inline-block;
   padding: 10px;
@@ -183,16 +187,9 @@ $(document).ready(function () {
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
-  content: "&#xe258;";
-  border: none;
-}
-
-.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
-  content: "";
+  content: "\e258";
   font-family: 'Glyphicons Halflings';
-  display: inline-block;
-  padding: 10px;
-  border-right: 1px solid #ddd;
+  border: none;
 }
 
 .tabset-dropdown > .nav-tabs > li.active {
@@ -293,18 +290,61 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">Portfolio 3</h1>
+<h1 class="title toc-ignore">Portfolio 3 - Feeding my Titanic
+Obsession</h1>
 
 </div>
 
 
 <blockquote>
-<p>The projects should be numbered consecutively (i.e., in the order in
-which you began them), and should include for each project a description
-of the goal, the product (computer program, hand graph, computer graph,
-etc.), the data, and some interpretation. Reports must be reproducible
-and of high quality in terms of writing, grammar, presentation, etc.</p>
+<p>The goal of this project is to evaluate and make improvements to a
+Titanic Lab found online. <a
+href="https://medium.com/@datathon/r-for-data-science-data-wrangling-d125285a6876"
+class="uri">https://medium.com/@datathon/r-for-data-science-data-wrangling-d125285a6876</a></p>
 </blockquote>
+<div id="eliminating-early-fluff" class="section level3">
+<h3>Eliminating early “fluff”</h3>
+<blockquote>
+<p>Much of the current lab has information that is unnecessary for where
+students are at this point in the semester. For example, the site
+includes installing R directions and explains the layout of R. For a
+visualization lab for this class, these instructions are
+unnessecary.</p>
+</blockquote>
+</div>
+<div id="importing-data" class="section level3">
+<h3>Importing Data</h3>
+<blockquote>
+<p>The clarity of this step could be improved. Here are some new
+steps:</p>
+</blockquote>
+<ol style="list-style-type: decimal">
+<li><p>Go to Kaggle Titanic Dataset <a
+href="https://www.kaggle.com/datasets/yasserh/titanic-dataset?resource=download"
+class="uri">https://www.kaggle.com/datasets/yasserh/titanic-dataset?resource=download</a></p></li>
+<li><p>Download the dataset in the format you would like, I did excel
+csv</p></li>
+<li><p>Extract the data set to your portfolio folder</p></li>
+<li><p>Install/load packages</p></li>
+</ol>
+<pre class="r"><code>library(tidyr)
+library(readxl)
+library(Rcpp) # needed to load Amelia
+library(Amelia) # package for missing data/imputation</code></pre>
+<pre><code>## ## 
+## ## Amelia II: Multiple Imputation
+## ## (Version 1.8.3, built: 2024-11-07)
+## ## Copyright (C) 2005-2025 James Honaker, Gary King and Matthew Blackwell
+## ## Refer to http://gking.harvard.edu/amelia/ for more information
+## ##</code></pre>
+<ol start="5" style="list-style-type: decimal">
+<li>Read in data</li>
+</ol>
+<pre class="r"><code>titanic &lt;- read.csv(&quot;Titanic-Dataset.csv&quot;)</code></pre>
+</div>
+<div id="exploring-and-cleaning-dataset" class="section level3">
+<h3>Exploring and cleaning dataset</h3>
+</div>
 
 
 

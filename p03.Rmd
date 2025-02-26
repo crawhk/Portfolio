@@ -1,5 +1,5 @@
 ---
-title: "Portfolio 3 - Feeding my Titanic Obsession"
+title: "Portfolio 3 - Fueling My Titanic Obsession"
 ---
 
 > The goal of this project is to evaluate and make improvements to a Titanic Lab found online. https://medium.com/@datathon/r-for-data-science-data-wrangling-d125285a6876 
@@ -31,7 +31,6 @@ library(Amelia) # package for missing data/imputation
 ```{r}
 titanic <- read.csv("Titanic-Dataset.csv")
 ```
-
 
 ### Exploring and cleaning dataset 
 
