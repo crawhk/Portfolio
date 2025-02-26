@@ -1,5 +1,29 @@
 ---
-title: "Portfolio 3"
+title: "Portfolio 3 - Feeding my Titanic Obsession"
 ---
 
-> The projects should be numbered consecutively (i.e., in the order in which you began them), and should include for each project a description of the goal, the product (computer program, hand graph, computer graph, etc.), the data, and some interpretation. Reports must be reproducible and of high quality in terms of writing, grammar, presentation, etc.
+> The goal of this project is to evaluate and make improvements to a Titanic Lab found online. 
+
+### Eliminating early "fluff"
+> Much of the current lab has information that is unnecessary for where students are at this point in the semester. For example, the site includes installing R directions and explains the layout of R. For a visualization lab for this class, these instructions are unnessecary.
+
+### Importing Data
+
+> The clarity of this step could be improved. Here are some new steps:
+
+1) Go to Kaggle Titanic Dataset 
+https://www.kaggle.com/datasets/yasserh/titanic-dataset?resource=download 
+
+2) Download the dataset in the format you would like, I did excel csv
+
+3) Extract the data set to your portfolio folder
+
+4) 
+
+```{r}
+read _excel("Titanic-Dataset.csv")
+```
+
+```{r}
+data(Titanic, package = "datasets")
+```
