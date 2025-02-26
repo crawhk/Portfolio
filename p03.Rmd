@@ -2,7 +2,7 @@
 title: "Portfolio 3 - Feeding my Titanic Obsession"
 ---
 
-> The goal of this project is to evaluate and make improvements to a Titanic Lab found online. 
+> The goal of this project is to evaluate and make improvements to a Titanic Lab found online. https://medium.com/@datathon/r-for-data-science-data-wrangling-d125285a6876 
 
 ### Eliminating early "fluff"
 > Much of the current lab has information that is unnecessary for where students are at this point in the semester. For example, the site includes installing R directions and explains the layout of R. For a visualization lab for this class, these instructions are unnessecary.
@@ -18,12 +18,20 @@ https://www.kaggle.com/datasets/yasserh/titanic-dataset?resource=download
 
 3) Extract the data set to your portfolio folder
 
-4) 
+4) Install/load packages 
 
 ```{r}
-read _excel("Titanic-Dataset.csv")
+library(tidyr)
+library(readxl)
+library(Rcpp) # needed to load Amelia
+library(Amelia) # package for missing data/imputation
 ```
 
+5) Read in data 
 ```{r}
-data(Titanic, package = "datasets")
+titanic <- read.csv("Titanic-Dataset.csv")
 ```
+
+
+### Exploring and cleaning dataset 
+
