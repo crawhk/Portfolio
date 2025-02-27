@@ -11,8 +11,8 @@ title: "Portfolio 3 - Fueling My Titanic Obsession"
 
 > The clarity of this step could be improved. Here are some new steps:
 
-1) Go to Kaggle Titanic Dataset 
-https://www.kaggle.com/datasets/yasserh/titanic-dataset?resource=download 
+1) Go to Kaggle Titanic Dataset - there are a lot of datasets on titanic out there, however the lab was not clear which was being used... so i believe this is the best match 
+https://www.kaggle.com/datasets/ibooth1/titanic3 
 
 2) Download the dataset in the format you would like, I did excel csv
 
@@ -25,13 +25,163 @@ library(tidyr)
 library(readxl)
 library(Rcpp) # needed to load Amelia
 library(Amelia) # package for missing data/imputation
+library(dplyr)
 ```
 
 5) Read in data 
 ```{r}
-titanic <- read.csv("Titanic-Dataset.csv")
+library(readxl)
+titanic <- read_xls("titanic3.xls")
+
 ```
 
 ### Exploring and cleaning dataset 
+
+```{r}
+str(titanic)
+```
+```{r}
+as_tibble(titanic)
+```
+
+
+#### Checking for missing values 
+```{r}
+missmap(titanic, col = c("red", "green"))
+```
+21% of data is missing 
+
+```{r}
+#Select relevant columns for the analysis
+selected_titanic <- titanic %>%
+  select(age, pclass, sex, survived, embarked, fare, cabin, parch, sibsp)
+```
+
+Reassess missing map
+```{r}
+missmap(selected_titanic, col = c("red", "green"))
+```
+Missing is now 11% 
+
+```{r}
+#Drop all the missing values
+selected_titanic <- drop_na(selected_titanic)
+```
+```{r}
+missmap(selected_titanic, col = c("red", "green"))
+```
+
+```{r}
+as_tibble(selected_titanic)
+```
+
+
+```{r}
+#merge columns parch and sibsp to create a new column, FamilySize
+selected_titanic$FamilySize <- selected_titanic$sibsp
+ + selected_titanic$parch + 1
+
+#Categorize the fare column and assign label to each category
+selected_titanic$FareCategory <- cut(selected_titanic$fare, breaks = c(0, 10, 20, 50, 100, Inf), labels = c("Lowest", "Lower Middle", "Upper Middle", "Higher", "Highest"))
+```
+
+```{r}
+View(selected_titanic)
+```
+
+```{r}
+#Remove irrelevant columns
+selected_titanic <- selected_titanic %>% 
+  select(-fare, -parch, -sibsp)
+```
+
+```{r}
+#Change the values of columns survived, age, and pclass
+
+selected_titanic <- selected_titanic %>%
+  mutate(
+    survived = ifelse(survived == 0, "No", "Yes"),
+
+    age = ifelse(age >= 18, "Adult", "Child"),
+
+    pclass = case_when(
+      pclass == 1 ~ "Upper",
+      pclass == 2 ~ "Middle",
+      pclass == 3 ~ "Lower"
+    )
+  )
+```
+
+```{r}
+#Change the name of columns
+selected_titanic <- selected_titanic %>% 
+  rename(
+    Class = pclass,
+    Survived = survived,
+    Age = age
+  )
+```
+
+
+### Visualizing and revealing patterns and insights   
+
+#### Fare Categories 
+
+```{r}
+#Create a table object fare_count
+fare_count <- table(selected_titanic$FareCategory)
+print(fare_count)
+```
+**Note: the website has a tibble of 270 rows, however reports 681 in their frequency counts... 
+
+```{r}
+
+library(ggplot2)
+# Create summary data frame of counts and percentage of
+# fare category from the selected titanic
+summary_fare <- selected_titanic %>%
+  group_by(FareCategory)%>%
+  summarize(n = n())%>%
+  mutate(Fpercentage = n/sum(n) * 100)
+
+# Create pie chart using the summary data frame
+ggplot(summary_fare, aes(x = " ", y = n, fill = FareCategory))+
+  geom_bar(stat = "identity", width = 1, color = "white")+
+  coord_polar(theta = "y")+
+  theme_void()+
+  labs("Fare Distribution in Titanic Dataset", fill = "Fare Category")+
+  geom_text(aes(label = paste0(round(Fpercentage, 2), "%")),
+                   position = position_stack(vjust = 0.5), color = "white")
+```
+** Note: not particularly fond of the pie charts
+
+#### Looking at gender distribution
+
+```{r}
+gender_count <- table(selected_titanic$sex)
+print(gender_count)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

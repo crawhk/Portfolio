@@ -11,7 +11,7 @@
 
 
 
-<title>Portfolio 3 - Feeding my Titanic Obsession</title>
+<title>Portfolio 3 - Fueling My Titanic Obsession</title>
 
 <script src="site_libs/header-attrs-2.29/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -290,7 +290,7 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">Portfolio 3 - Feeding my Titanic
+<h1 class="title toc-ignore">Portfolio 3 - Fueling My Titanic
 Obsession</h1>
 
 </div>
@@ -319,9 +319,11 @@ unnessecary.</p>
 steps:</p>
 </blockquote>
 <ol style="list-style-type: decimal">
-<li><p>Go to Kaggle Titanic Dataset <a
-href="https://www.kaggle.com/datasets/yasserh/titanic-dataset?resource=download"
-class="uri">https://www.kaggle.com/datasets/yasserh/titanic-dataset?resource=download</a></p></li>
+<li><p>Go to Kaggle Titanic Dataset - there are a lot of datasets on
+titanic out there, however the lab was not clear which was being used…
+so i believe this is the best match <a
+href="https://www.kaggle.com/datasets/ibooth1/titanic3"
+class="uri">https://www.kaggle.com/datasets/ibooth1/titanic3</a></p></li>
 <li><p>Download the dataset in the format you would like, I did excel
 csv</p></li>
 <li><p>Extract the data set to your portfolio folder</p></li>
@@ -337,13 +339,174 @@ library(Amelia) # package for missing data/imputation</code></pre>
 ## ## Copyright (C) 2005-2025 James Honaker, Gary King and Matthew Blackwell
 ## ## Refer to http://gking.harvard.edu/amelia/ for more information
 ## ##</code></pre>
+<pre class="r"><code>library(dplyr)</code></pre>
+<pre><code>## 
+## Attaching package: &#39;dplyr&#39;</code></pre>
+<pre><code>## The following objects are masked from &#39;package:stats&#39;:
+## 
+##     filter, lag</code></pre>
+<pre><code>## The following objects are masked from &#39;package:base&#39;:
+## 
+##     intersect, setdiff, setequal, union</code></pre>
 <ol start="5" style="list-style-type: decimal">
 <li>Read in data</li>
 </ol>
-<pre class="r"><code>titanic &lt;- read.csv(&quot;Titanic-Dataset.csv&quot;)</code></pre>
+<pre class="r"><code>library(readxl)
+titanic &lt;- read_xls(&quot;titanic3.xls&quot;)</code></pre>
+<pre><code>## Warning: Coercing text to numeric in M1306 / R1306C13: &#39;328&#39;</code></pre>
 </div>
 <div id="exploring-and-cleaning-dataset" class="section level3">
 <h3>Exploring and cleaning dataset</h3>
+<pre class="r"><code>str(titanic)</code></pre>
+<pre><code>## tibble [1,309 × 14] (S3: tbl_df/tbl/data.frame)
+##  $ pclass   : num [1:1309] 1 1 1 1 1 1 1 1 1 1 ...
+##  $ survived : num [1:1309] 1 1 0 0 0 1 1 0 1 0 ...
+##  $ name     : chr [1:1309] &quot;Allen, Miss. Elisabeth Walton&quot; &quot;Allison, Master. Hudson Trevor&quot; &quot;Allison, Miss. Helen Loraine&quot; &quot;Allison, Mr. Hudson Joshua Creighton&quot; ...
+##  $ sex      : chr [1:1309] &quot;female&quot; &quot;male&quot; &quot;female&quot; &quot;male&quot; ...
+##  $ age      : num [1:1309] 29 0.917 2 30 25 ...
+##  $ sibsp    : num [1:1309] 0 1 1 1 1 0 1 0 2 0 ...
+##  $ parch    : num [1:1309] 0 2 2 2 2 0 0 0 0 0 ...
+##  $ ticket   : chr [1:1309] &quot;24160&quot; &quot;113781&quot; &quot;113781&quot; &quot;113781&quot; ...
+##  $ fare     : num [1:1309] 211 152 152 152 152 ...
+##  $ cabin    : chr [1:1309] &quot;B5&quot; &quot;C22 C26&quot; &quot;C22 C26&quot; &quot;C22 C26&quot; ...
+##  $ embarked : chr [1:1309] &quot;S&quot; &quot;S&quot; &quot;S&quot; &quot;S&quot; ...
+##  $ boat     : chr [1:1309] &quot;2&quot; &quot;11&quot; NA NA ...
+##  $ body     : num [1:1309] NA NA NA 135 NA NA NA NA NA 22 ...
+##  $ home.dest: chr [1:1309] &quot;St Louis, MO&quot; &quot;Montreal, PQ / Chesterville, ON&quot; &quot;Montreal, PQ / Chesterville, ON&quot; &quot;Montreal, PQ / Chesterville, ON&quot; ...</code></pre>
+<pre class="r"><code>as_tibble(titanic)</code></pre>
+<pre><code>## # A tibble: 1,309 × 14
+##    pclass survived name     sex      age sibsp parch ticket  fare cabin embarked
+##     &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;    &lt;chr&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;  &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;   
+##  1      1        1 Allen, … fema… 29         0     0 24160  211.  B5    S       
+##  2      1        1 Allison… male   0.917     1     2 113781 152.  C22 … S       
+##  3      1        0 Allison… fema…  2         1     2 113781 152.  C22 … S       
+##  4      1        0 Allison… male  30         1     2 113781 152.  C22 … S       
+##  5      1        0 Allison… fema… 25         1     2 113781 152.  C22 … S       
+##  6      1        1 Anderso… male  48         0     0 19952   26.6 E12   S       
+##  7      1        1 Andrews… fema… 63         1     0 13502   78.0 D7    S       
+##  8      1        0 Andrews… male  39         0     0 112050   0   A36   S       
+##  9      1        1 Appleto… fema… 53         2     0 11769   51.5 C101  S       
+## 10      1        0 Artagav… male  71         0     0 PC 17…  49.5 &lt;NA&gt;  C       
+## # ℹ 1,299 more rows
+## # ℹ 3 more variables: boat &lt;chr&gt;, body &lt;dbl&gt;, home.dest &lt;chr&gt;</code></pre>
+<div id="checking-for-missing-values" class="section level4">
+<h4>Checking for missing values</h4>
+<pre class="r"><code>missmap(titanic, col = c(&quot;red&quot;, &quot;green&quot;))</code></pre>
+<pre><code>## Warning: Unknown or uninitialised column: `arguments`.
+## Unknown or uninitialised column: `arguments`.</code></pre>
+<pre><code>## Warning: Unknown or uninitialised column: `imputations`.</code></pre>
+<p><img src="p03_files/figure-html/unnamed-chunk-5-1.png" width="672" />
+21% of data is missing</p>
+<pre class="r"><code>#Select relevant columns for the analysis
+selected_titanic &lt;- titanic %&gt;%
+  select(age, pclass, sex, survived, embarked, fare, cabin, parch, sibsp)</code></pre>
+<p>Reassess missing map</p>
+<pre class="r"><code>missmap(selected_titanic, col = c(&quot;red&quot;, &quot;green&quot;))</code></pre>
+<pre><code>## Warning: Unknown or uninitialised column: `arguments`.
+## Unknown or uninitialised column: `arguments`.</code></pre>
+<pre><code>## Warning: Unknown or uninitialised column: `imputations`.</code></pre>
+<p><img src="p03_files/figure-html/unnamed-chunk-7-1.png" width="672" />
+Missing is now 11%</p>
+<pre class="r"><code>#Drop all the missing values
+selected_titanic &lt;- drop_na(selected_titanic)</code></pre>
+<pre class="r"><code>missmap(selected_titanic, col = c(&quot;red&quot;, &quot;green&quot;))</code></pre>
+<pre><code>## Warning: Unknown or uninitialised column: `arguments`.
+## Unknown or uninitialised column: `arguments`.</code></pre>
+<pre><code>## Warning: Unknown or uninitialised column: `imputations`.</code></pre>
+<p><img src="p03_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<pre class="r"><code>as_tibble(selected_titanic)</code></pre>
+<pre><code>## # A tibble: 270 × 9
+##       age pclass sex    survived embarked  fare cabin   parch sibsp
+##     &lt;dbl&gt;  &lt;dbl&gt; &lt;chr&gt;     &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt;
+##  1 29          1 female        1 S        211.  B5          0     0
+##  2  0.917      1 male          1 S        152.  C22 C26     2     1
+##  3  2          1 female        0 S        152.  C22 C26     2     1
+##  4 30          1 male          0 S        152.  C22 C26     2     1
+##  5 25          1 female        0 S        152.  C22 C26     2     1
+##  6 48          1 male          1 S         26.6 E12         0     0
+##  7 63          1 female        1 S         78.0 D7          0     1
+##  8 39          1 male          0 S          0   A36         0     0
+##  9 53          1 female        1 S         51.5 C101        0     2
+## 10 47          1 male          0 C        228.  C62 C64     0     1
+## # ℹ 260 more rows</code></pre>
+<pre class="r"><code>#merge columns parch and sibsp to create a new column, FamilySize
+selected_titanic$FamilySize &lt;- selected_titanic$sibsp
+ + selected_titanic$parch + 1</code></pre>
+<pre><code>##   [1] 1 3 3 3 3 1 1 1 1 1 1 1 1 2 2 1 1 2 2 1 1 1 1 1 1 1 1 1 1 1 2 1 1 1 1 1 1
+##  [38] 1 1 2 2 1 3 3 3 3 1 1 1 1 1 1 1 1 1 1 1 1 2 2 3 1 2 3 2 1 1 1 1 3 1 1 2 3
+##  [75] 2 1 2 1 1 1 1 2 1 1 1 1 1 3 3 3 3 5 5 1 1 3 2 2 1 1 1 1 1 1 1 1 1 2 2 2 2
+## [112] 1 1 1 1 1 1 1 1 1 1 2 2 1 1 2 2 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 1 1 1 2 1 1
+## [149] 1 1 1 1 1 1 1 1 1 1 1 1 2 1 1 3 3 1 2 2 1 1 1 1 1 1 1 1 1 1 2 2 1 1 1 1 3
+## [186] 3 3 4 4 1 1 1 1 1 1 1 1 1 1 1 1 1 3 2 2 1 1 1 1 1 1 1 1 1 1 3 2 2 1 2 3 2
+## [223] 1 1 1 1 1 2 2 1 3 2 3 2 1 1 1 2 2 2 4 1 1 1 1 1 1 1 2 2 3 1 1 1 1 1 1 1 1
+## [260] 1 1 2 2 1 2 3 2 1 2 2</code></pre>
+<pre class="r"><code>#Categorize the fare column and assign label to each category
+selected_titanic$FareCategory &lt;- cut(selected_titanic$fare, breaks = c(0, 10, 20, 50, 100, Inf), labels = c(&quot;Lowest&quot;, &quot;Lower Middle&quot;, &quot;Upper Middle&quot;, &quot;Higher&quot;, &quot;Highest&quot;))</code></pre>
+<pre class="r"><code>View(selected_titanic)</code></pre>
+<pre class="r"><code>#Remove irrelevant columns
+selected_titanic &lt;- selected_titanic %&gt;% 
+  select(-fare, -parch, -sibsp)</code></pre>
+<pre class="r"><code>#Change the values of columns survived, age, and pclass
+
+selected_titanic &lt;- selected_titanic %&gt;%
+  mutate(
+    survived = ifelse(survived == 0, &quot;No&quot;, &quot;Yes&quot;),
+
+    age = ifelse(age &gt;= 18, &quot;Adult&quot;, &quot;Child&quot;),
+
+    pclass = case_when(
+      pclass == 1 ~ &quot;Upper&quot;,
+      pclass == 2 ~ &quot;Middle&quot;,
+      pclass == 3 ~ &quot;Lower&quot;
+    )
+  )</code></pre>
+<pre class="r"><code>#Change the name of columns
+selected_titanic &lt;- selected_titanic %&gt;% 
+  rename(
+    Class = pclass,
+    Survived = survived,
+    Age = age
+  )</code></pre>
+</div>
+</div>
+<div id="visualizing-and-revealing-patterns-and-insights"
+class="section level1">
+<h1>Visualizing and revealing patterns and insights</h1>
+<div id="fare-categories" class="section level3">
+<h3>Fare Categories</h3>
+<pre class="r"><code>#Create a table object fare_count
+fare_count &lt;- table(selected_titanic$FareCategory)
+print(fare_count)</code></pre>
+<pre><code>## 
+##       Lowest Lower Middle Upper Middle       Higher      Highest 
+##            7           21           67          104           68</code></pre>
+<p>**Note: the website has a tibble of 270 rows, however reports 681 in
+their frequency counts…</p>
+<pre class="r"><code>library(ggplot2)
+# Create summary data frame of counts and percentage of
+# fare category from the selected titanic
+summary_fare &lt;- selected_titanic %&gt;%
+  group_by(FareCategory)%&gt;%
+  summarize(n = n())%&gt;%
+  mutate(Fpercentage = n/sum(n) * 100)
+
+# Create pie chart using the summary data frame
+ggplot(summary_fare, aes(x = &quot; &quot;, y = n, fill = FareCategory))+
+  geom_bar(stat = &quot;identity&quot;, width = 1, color = &quot;white&quot;)+
+  coord_polar(theta = &quot;y&quot;)+
+  theme_void()+
+  labs(&quot;Fare Distribution in Titanic Dataset&quot;, fill = &quot;Fare Category&quot;)+
+  geom_text(aes(label = paste0(round(Fpercentage, 2), &quot;%&quot;)),
+                   position = position_stack(vjust = 0.5), color = &quot;white&quot;)</code></pre>
+<p><img src="p03_files/figure-html/unnamed-chunk-17-1.png" width="672" />
+** Note: not particularly fond of the pie charts</p>
+<p>##Looking at gender distribution</p>
+<pre class="r"><code>gender_count &lt;- table(selected_titanic$sex)
+print(gender_count)</code></pre>
+<pre><code>## 
+## female   male 
+##    132    138</code></pre>
+</div>
 </div>
 
 
