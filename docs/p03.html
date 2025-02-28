@@ -297,8 +297,10 @@ Obsession</h1>
 
 
 <blockquote>
-<p>The goal of this project is to evaluate and make improvements to a
-Titanic Lab found online. <a
+<p>The goal of this project is to go through the Titanic lab that I
+found online and provide commentary on its usefullness. For next
+portfolio piece I hope to create a new lab using the Titanic data set
+based on my review of the current project. <a
 href="https://medium.com/@datathon/r-for-data-science-data-wrangling-d125285a6876"
 class="uri">https://medium.com/@datathon/r-for-data-science-data-wrangling-d125285a6876</a></p>
 </blockquote>
@@ -399,7 +401,7 @@ titanic &lt;- read_xls(&quot;titanic3.xls&quot;)</code></pre>
 21% of data is missing</p>
 <pre class="r"><code>#Select relevant columns for the analysis
 selected_titanic &lt;- titanic %&gt;%
-  select(age, pclass, sex, survived, embarked, fare, cabin, parch, sibsp)</code></pre>
+  select(age, pclass, sex, survived, embarked, fare, cabin, parch, sibsp, home.dest)</code></pre>
 <p>Reassess missing map</p>
 <pre class="r"><code>missmap(selected_titanic, col = c(&quot;red&quot;, &quot;green&quot;))</code></pre>
 <pre><code>## Warning: Unknown or uninitialised column: `arguments`.
@@ -415,31 +417,30 @@ selected_titanic &lt;- drop_na(selected_titanic)</code></pre>
 <pre><code>## Warning: Unknown or uninitialised column: `imputations`.</code></pre>
 <p><img src="p03_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
 <pre class="r"><code>as_tibble(selected_titanic)</code></pre>
-<pre><code>## # A tibble: 270 × 9
-##       age pclass sex    survived embarked  fare cabin   parch sibsp
-##     &lt;dbl&gt;  &lt;dbl&gt; &lt;chr&gt;     &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt;
-##  1 29          1 female        1 S        211.  B5          0     0
-##  2  0.917      1 male          1 S        152.  C22 C26     2     1
-##  3  2          1 female        0 S        152.  C22 C26     2     1
-##  4 30          1 male          0 S        152.  C22 C26     2     1
-##  5 25          1 female        0 S        152.  C22 C26     2     1
-##  6 48          1 male          1 S         26.6 E12         0     0
-##  7 63          1 female        1 S         78.0 D7          0     1
-##  8 39          1 male          0 S          0   A36         0     0
-##  9 53          1 female        1 S         51.5 C101        0     2
-## 10 47          1 male          0 C        228.  C62 C64     0     1
-## # ℹ 260 more rows</code></pre>
+<pre><code>## # A tibble: 239 × 10
+##       age pclass sex    survived embarked  fare cabin   parch sibsp home.dest   
+##     &lt;dbl&gt;  &lt;dbl&gt; &lt;chr&gt;     &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;       
+##  1 29          1 female        1 S        211.  B5          0     0 St Louis, MO
+##  2  0.917      1 male          1 S        152.  C22 C26     2     1 Montreal, P…
+##  3  2          1 female        0 S        152.  C22 C26     2     1 Montreal, P…
+##  4 30          1 male          0 S        152.  C22 C26     2     1 Montreal, P…
+##  5 25          1 female        0 S        152.  C22 C26     2     1 Montreal, P…
+##  6 48          1 male          1 S         26.6 E12         0     0 New York, NY
+##  7 63          1 female        1 S         78.0 D7          0     1 Hudson, NY  
+##  8 39          1 male          0 S          0   A36         0     0 Belfast, NI 
+##  9 53          1 female        1 S         51.5 C101        0     2 Bayside, Qu…
+## 10 47          1 male          0 C        228.  C62 C64     0     1 New York, NY
+## # ℹ 229 more rows</code></pre>
 <pre class="r"><code>#merge columns parch and sibsp to create a new column, FamilySize
 selected_titanic$FamilySize &lt;- selected_titanic$sibsp
  + selected_titanic$parch + 1</code></pre>
-<pre><code>##   [1] 1 3 3 3 3 1 1 1 1 1 1 1 1 2 2 1 1 2 2 1 1 1 1 1 1 1 1 1 1 1 2 1 1 1 1 1 1
-##  [38] 1 1 2 2 1 3 3 3 3 1 1 1 1 1 1 1 1 1 1 1 1 2 2 3 1 2 3 2 1 1 1 1 3 1 1 2 3
-##  [75] 2 1 2 1 1 1 1 2 1 1 1 1 1 3 3 3 3 5 5 1 1 3 2 2 1 1 1 1 1 1 1 1 1 2 2 2 2
-## [112] 1 1 1 1 1 1 1 1 1 1 2 2 1 1 2 2 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 1 1 1 2 1 1
-## [149] 1 1 1 1 1 1 1 1 1 1 1 1 2 1 1 3 3 1 2 2 1 1 1 1 1 1 1 1 1 1 2 2 1 1 1 1 3
-## [186] 3 3 4 4 1 1 1 1 1 1 1 1 1 1 1 1 1 3 2 2 1 1 1 1 1 1 1 1 1 1 3 2 2 1 2 3 2
-## [223] 1 1 1 1 1 2 2 1 3 2 3 2 1 1 1 2 2 2 4 1 1 1 1 1 1 1 2 2 3 1 1 1 1 1 1 1 1
-## [260] 1 1 2 2 1 2 3 2 1 2 2</code></pre>
+<pre><code>##   [1] 1 3 3 3 3 1 1 1 1 1 1 1 1 2 2 1 2 2 1 1 1 1 1 1 1 1 1 2 1 1 1 1 1 1 1 2 2
+##  [38] 1 3 3 3 3 1 1 1 1 1 1 1 1 1 1 1 2 2 3 1 2 3 2 1 1 1 1 3 1 1 2 3 2 1 2 1 1
+##  [75] 1 1 2 1 1 1 1 1 3 3 3 3 5 5 1 3 2 2 1 1 1 1 1 1 1 2 2 2 2 1 1 1 1 1 1 1 1
+## [112] 2 2 1 1 2 2 1 1 1 1 1 1 1 1 1 1 1 2 2 1 1 2 1 1 1 1 1 1 1 1 1 1 1 1 1 2 1
+## [149] 1 3 3 2 2 1 1 1 1 1 1 1 1 1 2 2 1 1 1 1 3 3 3 4 4 1 1 1 1 1 1 1 1 1 1 1 1
+## [186] 3 2 2 1 1 1 1 1 1 1 1 1 1 3 2 2 1 2 3 2 1 1 1 1 1 2 2 1 3 2 3 2 1 1 2 2 2
+## [223] 4 1 1 1 1 1 1 1 2 2 3 1 1 1 1 1 1</code></pre>
 <pre class="r"><code>#Categorize the fare column and assign label to each category
 selected_titanic$FareCategory &lt;- cut(selected_titanic$fare, breaks = c(0, 10, 20, 50, 100, Inf), labels = c(&quot;Lowest&quot;, &quot;Lower Middle&quot;, &quot;Upper Middle&quot;, &quot;Higher&quot;, &quot;Highest&quot;))</code></pre>
 <pre class="r"><code>View(selected_titanic)</code></pre>
@@ -470,16 +471,16 @@ selected_titanic &lt;- selected_titanic %&gt;%
 </div>
 </div>
 <div id="visualizing-and-revealing-patterns-and-insights"
-class="section level1">
-<h1>Visualizing and revealing patterns and insights</h1>
-<div id="fare-categories" class="section level3">
-<h3>Fare Categories</h3>
+class="section level3">
+<h3>Visualizing and revealing patterns and insights</h3>
+<div id="fare-categories" class="section level4">
+<h4>Fare Categories</h4>
 <pre class="r"><code>#Create a table object fare_count
 fare_count &lt;- table(selected_titanic$FareCategory)
 print(fare_count)</code></pre>
 <pre><code>## 
 ##       Lowest Lower Middle Upper Middle       Higher      Highest 
-##            7           21           67          104           68</code></pre>
+##            2           13           67           97           58</code></pre>
 <p>**Note: the website has a tibble of 270 rows, however reports 681 in
 their frequency counts…</p>
 <pre class="r"><code>library(ggplot2)
@@ -500,13 +501,245 @@ ggplot(summary_fare, aes(x = &quot; &quot;, y = n, fill = FareCategory))+
                    position = position_stack(vjust = 0.5), color = &quot;white&quot;)</code></pre>
 <p><img src="p03_files/figure-html/unnamed-chunk-17-1.png" width="672" />
 ** Note: not particularly fond of the pie charts</p>
-<p>##Looking at gender distribution</p>
+</div>
+<div id="looking-at-gender-distribution" class="section level4">
+<h4>Looking at gender distribution</h4>
 <pre class="r"><code>gender_count &lt;- table(selected_titanic$sex)
 print(gender_count)</code></pre>
 <pre><code>## 
 ## female   male 
-##    132    138</code></pre>
+##    113    126</code></pre>
+<pre class="r"><code>summary_gender &lt;- selected_titanic %&gt;%
+  group_by(sex) %&gt;%
+  summarize(n = n()) %&gt;%
+  mutate(Gpercentage = n / sum(n) * 100)
+
+ggplot(summary_gender, aes(x = &quot;&quot;, y = n, fill = sex)) +
+  geom_bar(stat = &quot;identity&quot;, width = 1, color = &quot;white&quot;) +
+  coord_polar(theta = &quot;y&quot;) +
+  theme_void() +
+  labs(title = &quot;Gender Distribution in Titanic Dataset&quot;, fill = &quot;Gender&quot;) +
+  geom_text(aes(label = paste0(round(Gpercentage, 2), &quot;%&quot;)),
+            position = position_stack(vjust = 0.5), color = &quot;white&quot;)</code></pre>
+<p><img src="p03_files/figure-html/unnamed-chunk-19-1.png" width="672" /></p>
 </div>
+<div id="age-distribution" class="section level4">
+<h4>Age distribution</h4>
+<pre class="r"><code># Create a table of counts object for the Age column from the selected_titanic
+# data frame
+age_count &lt;- table(selected_titanic$Age)
+
+# Visualize the Age Distribution using pie function instead of ggplot2 library
+pie(age_count, main = &quot;Age Distribution in Titanic Dataset&quot;, 
+    labels = paste(round(age_count/sum(age_count) * 100, 2), &quot;%&quot;, sep = &quot;&quot;), 
+    col = rainbow(length(age_count)))
+
+# Add legend with age groups
+legend(&quot;topright&quot;, names(age_count), cex = 0.8, 
+       fill = rainbow(length(age_count)))</code></pre>
+<p><img src="p03_files/figure-html/unnamed-chunk-20-1.png" width="672" /></p>
+</div>
+<div id="port-of-embarkation-distribution" class="section level4">
+<h4>Port of embarkation distribution</h4>
+<pre class="r"><code># Create a bar chart visualizing the Embarked column using functions from 
+# the ggplot2 library
+
+ggplot(selected_titanic, aes(x = embarked, fill = embarked)) +
+  geom_bar() +
+  theme_classic() +
+  labs(x = &quot;Port of Embarkation&quot;, y = &quot;Number of Passengers&quot;,
+       title = &quot;Port of Embarkation Distribution in Titanic Dataset&quot;)</code></pre>
+<p><img src="p03_files/figure-html/unnamed-chunk-21-1.png" width="672" /></p>
+</div>
+<div id="ticket-class-distribution" class="section level4">
+<h4>Ticket class distribution</h4>
+<pre class="r"><code># Create a table of counts object for the Class column 
+class_count &lt;- table(selected_titanic$Class)
+
+# Visualize the Age Distribution using pie function instead of ggplot2 library
+ barplot(class_count,
+    main = &quot;Passengers&#39; Ticket Class Distribution in Titanic Dataset&quot;, 
+    xlab = &quot;Ticket Class&quot;, 
+    ylab = &quot;Number of Passengers&quot;, 
+    col = &quot;skyblue&quot;)</code></pre>
+<p><img src="p03_files/figure-html/unnamed-chunk-22-1.png" width="672" /></p>
+</div>
+<div id="destination-distribution" class="section level4">
+<h4>Destination distribution</h4>
+<pre class="r"><code>summary_destination &lt;- selected_titanic %&gt;%
+    group_by(home.dest) %&gt;%
+    summarise(count = n()) %&gt;%
+    arrange(desc(count)) %&gt;%
+    head(10)
+
+# Convert home.dest to a factor for better plotting
+summary_destination$home.dest &lt;- factor(summary_destination$home.dest, levels = summary_destination$home.dest)
+
+# Create a heatmap
+ggplot(summary_destination, aes(x = home.dest, y = count, fill = count)) +
+  geom_tile() +
+  labs(title = &quot;Top 10 Destination Distribution of Passengers in Titanic Dataset&quot;, 
+       x = &quot;Destination&quot;, y = &quot;Number of Passengers&quot;) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1))</code></pre>
+<p><img src="p03_files/figure-html/unnamed-chunk-23-1.png" width="672" /></p>
+</div>
+<div id="survival-rate-distribution" class="section level4">
+<h4>Survival rate distribution</h4>
+<pre class="r"><code># Create a summary data frame object for the Survived column
+summary_survived &lt;- selected_titanic %&gt;%
+  group_by(Survived) %&gt;%
+  summarise(n = n(), .groups = &quot;drop&quot;) %&gt;%
+  mutate(Spercentage = n / sum(n) * 100)
+
+# Create a pie chart using ggplot2 library
+ggplot(summary_survived, aes(x = &quot;&quot;, y = n, fill = factor(Survived))) +
+  geom_bar(stat = &quot;identity&quot;, width = 1, color = &quot;white&quot;) +
+  coord_polar(theta = &quot;y&quot;) +
+  theme_void() +
+  labs(title = &quot;Survival Distribution in Titanic Dataset&quot;, fill = &quot;Survived&quot;) +
+  geom_text(aes(label = paste0(round(Spercentage, 2), &quot;%&quot;)), 
+            position = position_stack(vjust = 0.5), color = &quot;white&quot;) +
+  scale_fill_manual(values = c(&quot;0&quot; = &quot;red&quot;, &quot;1&quot; = &quot;darkgreen&quot;), 
+                    labels = c(&quot;Did Not Survive&quot;, &quot;Survived&quot;))</code></pre>
+<pre><code>## Warning: No shared levels found between `names(values)` of the manual scale and the
+## data&#39;s fill values.
+## No shared levels found between `names(values)` of the manual scale and the
+## data&#39;s fill values.
+## No shared levels found between `names(values)` of the manual scale and the
+## data&#39;s fill values.</code></pre>
+<p><img src="p03_files/figure-html/unnamed-chunk-24-1.png" width="672" /></p>
+</div>
+</div>
+<div id="univariate-analyses" class="section level3">
+<h3>Univariate Analyses</h3>
+<div id="survival-rate-by-category" class="section level4">
+<h4>Survival rate by category</h4>
+<pre class="r"><code># Bin the fare values into categories
+selected_titanic &lt;- titanic %&gt;%
+  mutate(FareCategory = cut(fare, 
+                             breaks = c(-1, 10, 30, 100, Inf), 
+                             labels = c(&quot;Low&quot;, &quot;Medium&quot;, &quot;High&quot;, &quot;Very High&quot;)))
+
+# Create a summary dataframe object
+summary_sf &lt;- selected_titanic %&gt;%
+  group_by(FareCategory, survived) %&gt;%
+  summarise(survival_rate = n(), .groups = &quot;drop&quot;) %&gt;%
+  mutate(sfPercentage = survival_rate / sum(survival_rate) * 100)
+
+# Create the plot using the summary data frame
+ggplot(summary_sf, aes(x = FareCategory, y = sfPercentage, fill = factor(survived))) +
+  geom_bar(stat = &quot;identity&quot;, position = &quot;dodge&quot;) +
+  labs(title = &quot;Survival Rate by Fare Category in Titanic Dataset&quot;, 
+       x = &quot;Fare Category&quot;, y = &quot;Survival Rate (%)&quot;) +
+  scale_fill_manual(values = c(&quot;0&quot; = &quot;red&quot;, &quot;1&quot; = &quot;darkgreen&quot;), 
+                    labels = c(&quot;Did Not Survive&quot;, &quot;Survived&quot;)) +
+  theme_minimal()</code></pre>
+<p><img src="p03_files/figure-html/unnamed-chunk-25-1.png" width="672" /></p>
+<pre class="r"><code># Create a summary dataframe object
+summary_sg &lt;- selected_titanic %&gt;%
+  group_by(sex, survived) %&gt;%
+  summarise(count = n(), .groups = &quot;drop&quot;) %&gt;%  # Fixing the grouping issue
+  mutate(sgPercentage = count / sum(count) * 100)  # Ensuring percentages are correctly calculated
+
+# Create the plot
+ggplot(summary_sg, aes(x = sex, y = sgPercentage, fill = factor(survived))) +
+  geom_bar(stat = &quot;identity&quot;, position = &quot;stack&quot;) +
+  labs(title = &quot;Survival Rate by Gender in Titanic Dataset&quot;, 
+       x = &quot;Gender&quot;, y = &quot;Survival Rate (%)&quot;) +
+  theme_classic() +
+  scale_fill_manual(values = c(&quot;0&quot; = &quot;red&quot;, &quot;1&quot; = &quot;darkgreen&quot;), 
+                    labels = c(&quot;Did Not Survive&quot;, &quot;Survived&quot;))</code></pre>
+<p><img src="p03_files/figure-html/unnamed-chunk-26-1.png" width="672" /></p>
+</div>
+<div id="survival-rate-by-age" class="section level4">
+<h4>Survival rate by age</h4>
+<pre class="r"><code># Bin the Age variable into categories
+selected_titanic &lt;- selected_titanic %&gt;%
+  mutate(age_group = cut(age, 
+                         breaks = c(-Inf, 18, 35, 60, Inf), 
+                         labels = c(&quot;Child&quot;, &quot;Young Adult&quot;, &quot;Adult&quot;, &quot;Elderly&quot;)))
+
+# Create a summary dataframe object
+summary_sa &lt;- selected_titanic %&gt;%
+  group_by(age_group, survived) %&gt;%
+  summarise(count = n(), .groups = &quot;drop&quot;) %&gt;%
+  mutate(saPercentage = count / sum(count) * 100)
+
+# Create the plot
+ggplot(summary_sa, aes(x = age_group, y = saPercentage, fill = factor(survived))) +
+  geom_bar(stat = &quot;identity&quot;, position = &quot;dodge&quot;) +
+  labs(title = &quot;Survival Rate by Age in Titanic Dataset&quot;,
+       x = &quot;Age Group&quot;, y = &quot;Survival Rate (%)&quot;, fill = &quot;Survived&quot;) +
+  theme_classic() +
+  scale_fill_manual(values = c(&quot;0&quot; = &quot;red&quot;, &quot;1&quot; = &quot;darkgreen&quot;),
+                    labels = c(&quot;Did Not Survive&quot;, &quot;Survived&quot;))</code></pre>
+<p><img src="p03_files/figure-html/unnamed-chunk-27-1.png" width="672" /></p>
+</div>
+<div id="survival-rate-by-class" class="section level4">
+<h4>Survival rate by class</h4>
+<pre class="r"><code> summary_sc &lt;- selected_titanic %&gt;%
+  group_by (pclass, survived) %&gt;%
+  summarise(count = n())%&gt;%
+  mutate(scPercentage = count/sum(count) * 100)</code></pre>
+<pre><code>## `summarise()` has grouped output by &#39;pclass&#39;. You can override using the
+## `.groups` argument.</code></pre>
+<pre class="r"><code>ggplot(summary_sc, aes (x = pclass, y = scPercentage, fill = survived)) +
+  geom_bar(stat = &quot;identity&quot;, position = &quot;stack&quot;) +
+  labs(title = &quot;Survival Rate by Ticket Class in Titanic Dataset&quot;,
+           x = &quot;Ticket Class&quot;, y = &quot;Survival Rate (%)&quot;)+
+  theme_minimal()</code></pre>
+<p><img src="p03_files/figure-html/unnamed-chunk-28-1.png" width="672" /></p>
+</div>
+<div id="survival-rate-by-deportation-port" class="section level4">
+<h4>Survival rate by deportation port</h4>
+<pre class="r"><code># Create the summary dataframe
+summary_sp &lt;- selected_titanic %&gt;%
+  group_by(embarked, survived) %&gt;%
+  summarise(count = n(), .groups = &quot;drop&quot;) %&gt;%
+  mutate(spPercentage = count / sum(count) * 100)
+
+# Create the plot
+ggplot(summary_sp, aes(x = embarked, y = spPercentage, fill = factor(survived))) +
+  geom_bar(stat = &quot;identity&quot;, position = &quot;dodge&quot;) +
+  labs(title = &quot;Survival Rate by Port of Embarkation in Titanic Dataset&quot;, 
+       x = &quot;Port of Embarkation&quot;, y = &quot;Survival Rate (%)&quot;) +
+  theme_classic() +
+  scale_fill_manual(values = c(&quot;0&quot; = &quot;red&quot;, &quot;1&quot; = &quot;darkgreen&quot;), 
+                    labels = c(&quot;Did Not Survive&quot;, &quot;Survived&quot;))</code></pre>
+<p><img src="p03_files/figure-html/unnamed-chunk-29-1.png" width="672" /></p>
+</div>
+</div>
+<div id="commentary" class="section level3">
+<h3>Commentary</h3>
+<p>Overall, I enjoyed working through this lab as I found the topic to
+peak my interest. However, for the purposes of our class I believe that
+there are quite a few changes that could be made.</p>
+<ol style="list-style-type: decimal">
+<li><p>There was a lot of debugging that I had to do with the code
+provided. Much of this was for minor things such as sloppy
+capitalization, functions not working, etc. However, this could be very
+frustrating especially if it is used as an early lab and students are
+not well versed in debugging quite yet.</p></li>
+<li><p>There was a lot of text that needed to be paraphrased/cut
+out.</p></li>
+<li><p>This lab seemed to go on forever, and it would have benefited
+from clear/delineated steps.</p></li>
+<li><p>There was an over reliance on pie charts, which as we have
+learned are not the best for presenting data.</p></li>
+<li><p>It was oddly difficult to find the dataset that was being used -
+no link given, vague instructions… took much longer than needed</p></li>
+<li><p>Better context could have been required for the steps, also there
+were some functions that were just given without proper
+activity</p></li>
+<li><p>Lab could have been a bit more hands on, I genuinely felt like I
+was just copy and pasting code/didn’t write a single thing</p></li>
+<li><p>There appear to be some errors with the number of people left in
+the dataset/something isn’t adding up see notes on counts above</p></li>
+</ol>
+<p>For the next portfolio piece, my aim is to create a lab that would
+fit into the visualization portion of our class more fluidly, and
+improve some the areas above. :)</p>
 </div>
 
 

@@ -2,7 +2,7 @@
 title: "Portfolio 3 - Fueling My Titanic Obsession"
 ---
 
-> The goal of this project is to evaluate and make improvements to a Titanic Lab found online. https://medium.com/@datathon/r-for-data-science-data-wrangling-d125285a6876 
+> The goal of this project is to go through the Titanic lab that I found online and provide commentary on its usefullness. For next portfolio piece I hope to create a new lab using the Titanic data set based on my review of the current project.  https://medium.com/@datathon/r-for-data-science-data-wrangling-d125285a6876 
 
 ### Eliminating early "fluff"
 > Much of the current lab has information that is unnecessary for where students are at this point in the semester. For example, the site includes installing R directions and explains the layout of R. For a visualization lab for this class, these instructions are unnessecary.
@@ -54,7 +54,7 @@ missmap(titanic, col = c("red", "green"))
 ```{r}
 #Select relevant columns for the analysis
 selected_titanic <- titanic %>%
-  select(age, pclass, sex, survived, embarked, fare, cabin, parch, sibsp)
+  select(age, pclass, sex, survived, embarked, fare, cabin, parch, sibsp, home.dest)
 ```
 
 Reassess missing map
@@ -161,25 +161,241 @@ ggplot(summary_fare, aes(x = " ", y = n, fill = FareCategory))+
 gender_count <- table(selected_titanic$sex)
 print(gender_count)
 ```
+```{r}
+summary_gender <- selected_titanic %>%
+  group_by(sex) %>%
+  summarize(n = n()) %>%
+  mutate(Gpercentage = n / sum(n) * 100)
+
+ggplot(summary_gender, aes(x = "", y = n, fill = sex)) +
+  geom_bar(stat = "identity", width = 1, color = "white") +
+  coord_polar(theta = "y") +
+  theme_void() +
+  labs(title = "Gender Distribution in Titanic Dataset", fill = "Gender") +
+  geom_text(aes(label = paste0(round(Gpercentage, 2), "%")),
+            position = position_stack(vjust = 0.5), color = "white")
+```
 
 
+#### Age distribution 
+
+```{r}
+# Create a table of counts object for the Age column from the selected_titanic
+# data frame
+age_count <- table(selected_titanic$Age)
+
+# Visualize the Age Distribution using pie function instead of ggplot2 library
+pie(age_count, main = "Age Distribution in Titanic Dataset", 
+    labels = paste(round(age_count/sum(age_count) * 100, 2), "%", sep = ""), 
+    col = rainbow(length(age_count)))
+
+# Add legend with age groups
+legend("topright", names(age_count), cex = 0.8, 
+       fill = rainbow(length(age_count)))
+```
+
+#### Port of embarkation distribution
+
+```{r}
+# Create a bar chart visualizing the Embarked column using functions from 
+# the ggplot2 library
+
+ggplot(selected_titanic, aes(x = embarked, fill = embarked)) +
+  geom_bar() +
+  theme_classic() +
+  labs(x = "Port of Embarkation", y = "Number of Passengers",
+       title = "Port of Embarkation Distribution in Titanic Dataset")
+
+```
+
+#### Ticket class distribution
+
+```{r}
+# Create a table of counts object for the Class column 
+class_count <- table(selected_titanic$Class)
+
+# Visualize the Age Distribution using pie function instead of ggplot2 library
+ barplot(class_count,
+    main = "Passengers' Ticket Class Distribution in Titanic Dataset", 
+    xlab = "Ticket Class", 
+    ylab = "Number of Passengers", 
+    col = "skyblue")
+```
+
+#### Destination distribution 
+
+```{r}
+summary_destination <- selected_titanic %>%
+    group_by(home.dest) %>%
+    summarise(count = n()) %>%
+    arrange(desc(count)) %>%
+    head(10)
+
+# Convert home.dest to a factor for better plotting
+summary_destination$home.dest <- factor(summary_destination$home.dest, levels = summary_destination$home.dest)
+
+# Create a heatmap
+ggplot(summary_destination, aes(x = home.dest, y = count, fill = count)) +
+  geom_tile() +
+  labs(title = "Top 10 Destination Distribution of Passengers in Titanic Dataset", 
+       x = "Destination", y = "Number of Passengers") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1))
+```
+
+#### Survival rate distribution
+
+```{r}
+
+# Create a summary data frame object for the Survived column
+summary_survived <- selected_titanic %>%
+  group_by(Survived) %>%
+  summarise(n = n(), .groups = "drop") %>%
+  mutate(Spercentage = n / sum(n) * 100)
+
+# Create a pie chart using ggplot2 library
+ggplot(summary_survived, aes(x = "", y = n, fill = factor(Survived))) +
+  geom_bar(stat = "identity", width = 1, color = "white") +
+  coord_polar(theta = "y") +
+  theme_void() +
+  labs(title = "Survival Distribution in Titanic Dataset", fill = "Survived") +
+  geom_text(aes(label = paste0(round(Spercentage, 2), "%")), 
+            position = position_stack(vjust = 0.5), color = "white") +
+  scale_fill_manual(values = c("0" = "red", "1" = "darkgreen"), 
+                    labels = c("Did Not Survive", "Survived"))
+
+```
+
+### Univariate Analyses 
+
+#### Survival rate by category 
+
+```{r}
+# Bin the fare values into categories
+selected_titanic <- titanic %>%
+  mutate(FareCategory = cut(fare, 
+                             breaks = c(-1, 10, 30, 100, Inf), 
+                             labels = c("Low", "Medium", "High", "Very High")))
+
+# Create a summary dataframe object
+summary_sf <- selected_titanic %>%
+  group_by(FareCategory, survived) %>%
+  summarise(survival_rate = n(), .groups = "drop") %>%
+  mutate(sfPercentage = survival_rate / sum(survival_rate) * 100)
+
+# Create the plot using the summary data frame
+ggplot(summary_sf, aes(x = FareCategory, y = sfPercentage, fill = factor(survived))) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(title = "Survival Rate by Fare Category in Titanic Dataset", 
+       x = "Fare Category", y = "Survival Rate (%)") +
+  scale_fill_manual(values = c("0" = "red", "1" = "darkgreen"), 
+                    labels = c("Did Not Survive", "Survived")) +
+  theme_minimal()
+
+```
+
+```{r}
+
+# Create a summary dataframe object
+summary_sg <- selected_titanic %>%
+  group_by(sex, survived) %>%
+  summarise(count = n(), .groups = "drop") %>%  # Fixing the grouping issue
+  mutate(sgPercentage = count / sum(count) * 100)  # Ensuring percentages are correctly calculated
+
+# Create the plot
+ggplot(summary_sg, aes(x = sex, y = sgPercentage, fill = factor(survived))) +
+  geom_bar(stat = "identity", position = "stack") +
+  labs(title = "Survival Rate by Gender in Titanic Dataset", 
+       x = "Gender", y = "Survival Rate (%)") +
+  theme_classic() +
+  scale_fill_manual(values = c("0" = "red", "1" = "darkgreen"), 
+                    labels = c("Did Not Survive", "Survived"))
+
+```
+
+#### Survival rate by age
+
+```{r}
+# Bin the Age variable into categories
+selected_titanic <- selected_titanic %>%
+  mutate(age_group = cut(age, 
+                         breaks = c(-Inf, 18, 35, 60, Inf), 
+                         labels = c("Child", "Young Adult", "Adult", "Elderly")))
+
+# Create a summary dataframe object
+summary_sa <- selected_titanic %>%
+  group_by(age_group, survived) %>%
+  summarise(count = n(), .groups = "drop") %>%
+  mutate(saPercentage = count / sum(count) * 100)
+
+# Create the plot
+ggplot(summary_sa, aes(x = age_group, y = saPercentage, fill = factor(survived))) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(title = "Survival Rate by Age in Titanic Dataset",
+       x = "Age Group", y = "Survival Rate (%)", fill = "Survived") +
+  theme_classic() +
+  scale_fill_manual(values = c("0" = "red", "1" = "darkgreen"),
+                    labels = c("Did Not Survive", "Survived"))
+
+```
+
+#### Survival rate by class 
+```{r}
+ summary_sc <- selected_titanic %>%
+  group_by (pclass, survived) %>%
+  summarise(count = n())%>%
+  mutate(scPercentage = count/sum(count) * 100)
+
+ggplot(summary_sc, aes (x = pclass, y = scPercentage, fill = survived)) +
+  geom_bar(stat = "identity", position = "stack") +
+  labs(title = "Survival Rate by Ticket Class in Titanic Dataset",
+           x = "Ticket Class", y = "Survival Rate (%)")+
+  theme_minimal()
+```
+
+#### Survival rate by deportation port 
+
+```{r}
+# Create the summary dataframe
+summary_sp <- selected_titanic %>%
+  group_by(embarked, survived) %>%
+  summarise(count = n(), .groups = "drop") %>%
+  mutate(spPercentage = count / sum(count) * 100)
+
+# Create the plot
+ggplot(summary_sp, aes(x = embarked, y = spPercentage, fill = factor(survived))) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(title = "Survival Rate by Port of Embarkation in Titanic Dataset", 
+       x = "Port of Embarkation", y = "Survival Rate (%)") +
+  theme_classic() +
+  scale_fill_manual(values = c("0" = "red", "1" = "darkgreen"), 
+                    labels = c("Did Not Survive", "Survived"))
+
+```
+
+### Commentary 
+
+Overall, I enjoyed working through this lab as I found the topic to peak my interest. However, for the purposes of our class I believe that there are quite a few changes that could be made. 
+
+1) There was a lot of debugging that I had to do with the code provided. Much of this was for minor things such as sloppy capitalization, functions not working, etc. However, this could be very frustrating especially if it is used as an early lab and students are not well versed in debugging quite yet. 
+
+2) There was a lot of text that needed to be paraphrased/cut out. 
+
+3) This lab seemed to go on forever, and it would have benefited from clear/delineated steps. 
+
+4) There was an over reliance on pie charts, which as we have learned are not the best for presenting data. 
+
+5) It was oddly difficult to find the dataset that was being used - no link given, vague instructions... took much longer than needed. 
+
+6) Better context could have been required for the steps, also there were some functions that were just given without proper activity.
+
+7) Lab could have been a bit more hands on, I genuinely felt like I was just copy and pasting code/didn't write a single thing. 
+
+8) There appear to be some errors with the number of people left in the dataset/something isn't adding up see notes on counts above.  
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+For the next portfolio piece, my aim is to create a lab that would fit into the visualization portion of our class more fluidly, and improve some the areas above. 
+:) 
 
 
 
