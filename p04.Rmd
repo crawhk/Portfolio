@@ -1,5 +1,79 @@
 ---
-title: "Portfolio 4"
+title: "Portfolio 4 - Lying Graph for Thesis "
 ---
 
-> The projects should be numbered consecutively (i.e., in the order in which you began them), and should include for each project a description of the goal, the product (computer program, hand graph, computer graph, etc.), the data, and some interpretation. Reports must be reproducible and of high quality in terms of writing, grammar, presentation, etc.
+The goal of this project is to load my SPSS data into R and create a box and whiskers plot representing lying within each scenario. 
+
+##Step 1: Reading in SPSS Data 
+
+```{r}
+library(haven)
+library(tidyr)
+library(tidyverse)
+```
+
+
+```{r}
+Thesis <- read_spss("C:/Users/crawl/OneDrive/Documents/GitHub/Portfolio/ThesisAllDataNew.sav")
+```
+
+##Step 2: Creating Plots per scenario 
+> Goal here is to have a box and wiskers plot for each scenario (Romantic Partner-RP and Twenty Dollars-TD) with the dots visible for each data point. 
+
+```{r}
+ggplot(Thesis, aes(x = "", y = RPLieAvg)) +
+  geom_boxplot(outlier.shape = NA, fill = "lightgray")+
+  geom_jitter(width = 0.1, size = 2, alpha = 0.6, color = "Black") +
+  labs(x = NULL, y = "RPLieAvg") +
+  theme_minimal()
+```
+
+
+```{r}
+ggplot(Thesis, aes(x = "", y = TDLieAvg)) +
+  geom_boxplot(outlier.shape = NA, fill = "lightgray")+
+  geom_jitter(width = 0.1, size = 2, alpha = 0.6, color = "Black") +
+  labs(x = NULL, y = "TDLieAvg") +
+  theme_minimal()
+```
+
+## Step 3: Combining the scenarios into one plot
+
+
+```{r}
+library(tidyr)
+library(dplyr)
+
+
+Thesis_long <- Thesis %>%
+  pivot_longer(cols = c(RPLieAvg, TDLieAvg),
+               names_to = "Scenario",
+               values_to = "LieAvg")
+
+```
+
+```{r}
+
+library(extrafont)
+
+# Run once to import system fonts (takes a bit)
+font_import(prompt = FALSE)
+
+# Register fonts
+loadfonts(device = "win")  # or use `device = "pdf"` or "postscript" depending on output
+
+```
+
+
+```{r}
+library(ggplot2)
+library(extrafont)
+
+ggplot(Thesis_long, aes(x = Scenario, y = LieAvg)) +
+  geom_boxplot(outlier.shape = NA, fill = "lightgray") +
+  geom_jitter(width = 0.2, size = 2, alpha = 0.6, color = "black") +
+  labs(x = "Scenario", y = "Average Lying Score") +
+  theme_minimal(base_family = "Times New Roman")
+```
+
+
