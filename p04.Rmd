@@ -77,3 +77,4 @@ ggplot(Thesis_long, aes(x = Scenario, y = LieAvg)) +
 ```
 
 
+
