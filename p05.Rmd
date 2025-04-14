@@ -2,9 +2,94 @@
 title: "Portfolio 5"
 ---
 
-> The projects should be numbered consecutively (i.e., in the order in which you began them), and should include for each project a description of the goal, the product (computer program, hand graph, computer graph, etc.), the data, and some interpretation. Reports must be reproducible and of high quality in terms of writing, grammar, presentation, etc.
+> The goal here is to explore the Pixar Films data from TidyTuesday and see if I can find anything of interest. 
 
 ```{r}
-install.packages("pixarfilms")
+##install.packages("pixarfilms")
+```
+
+```{r}
+library("pixarfilms")
+library(tidyr)
+library(dplyr)
+
+```
+
+```{r}
+pixar <- pixar_films
+```
+
+## Runtime Trends 
+
+```{r}
+mean(pixar$run_time, na.rm = TRUE)
+```
+The average runtime for a Pixar film is around 105 minutes - how has that changed over time? 
+
+```{r}
+library(ggplot2)
+```
+
+```{r}
+pixar %>%  
+  ggplot(aes(x = release_date, y = run_time)) +
+  geom_line() +
+  geom_point() +
+  labs(title = "Pixar Film Runtimes Over Time", x = "Year", y = "Run Time ")
+```
+
+It appears that there was a large spike shortly after 2021 - I am curious to know which movie had such a long run time. 
+
+```{r}
+ggplot(pixar, aes(x = reorder(film, run_time), y = run_time)) +
+  geom_col() +
+  coord_flip() +
+  labs(title = "Pixar Film Runtimes", x = "Film", y = "Run Time")
+```
+```{r}
+pixar[which.max(pixar$run_time), ]
+pixar[which.min(pixar$run_time), ]
+
+```
+
+
+Apparently Luca has an extremely long run time, compared to the other Pixar films... perhaps I have to watch it now...
+
+Toy Story has the shortest run time - remains superior though...
+
+## Rating Trends 
+
+Let's see how run time varies by rating 
+
+```{r}
+pixar %>%
+  group_by(film_rating) %>%
+  summarise(mean_runtime = mean(run_time), count = n())
+```
+The majority of the movies are G rated and have an average run time of around 100 mins followed by PG rated moves with a similar run time (avg of 101). Not extremely surprised by these results. Let's plot this ...
+
+```{r}
+pixar %>%  
+  ggplot(aes(x = film_rating, fill = film_rating)) +
+  geom_bar() +
+  labs(title = "Distribution of Film Ratings", x = "Rating", y = "Count")
+```
+
+I am curious to know if ratings have become "less restrictive" or rather if more movies have been made recently that have more "severe" ratings
+
+```{r}
+pixar %>%  
+  ggplot(aes(x = release_date, y = film_rating, color = film_rating)) +
+  geom_point() +
+  labs(title = "Pixar Film Runtimes Over Time", x = "Release Date", y = "Film Rating")
+```
+ 
+Not particularly informative, but it does look like most early films were G rated where as around 2005 it looks like PG movies were introduced.
+ 
+## Years Since Release 
+
+```{r}
+pixar %>% 
+  mutate()
 ```
 
