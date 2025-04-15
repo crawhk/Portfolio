@@ -1,5 +1,5 @@
 ---
-title: "Portfolio 5"
+title: "Portfolio 5 - Pixar Films"
 ---
 
 > The goal here is to explore the Pixar Films data from TidyTuesday and see if I can find anything of interest. 
@@ -89,7 +89,46 @@ Not particularly informative, but it does look like most early films were G rate
 ## Years Since Release 
 
 ```{r}
-pixar %>% 
-  mutate()
+library(lubridate)
 ```
 
+```{r}
+pixarnew <- pixar %>%
+  mutate(years_since_release = year(Sys.Date()) -  year(release_date))
+```
+
+```{r}
+pixarnew %>%
+  group_by(film_rating) %>%
+  summarise(mean_years_old = mean(years_since_release, na.rm = TRUE))
+```
+The G rated films on average tend to be older than the PG rated films. 
+
+Let's see if films are getting shorter or longer...  
+
+```{r}
+ggplot(pixarnew, aes(x = years_since_release, y = run_time)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +
+  labs(title = "Do Pixar Films Get Longer Over Time?", y = "RunTime", x = "Years Since Release")
+
+```
+It looks like no - Pixar films have not gotten longer over time, rather more recent movies appear to be longer, but I am curious to see this without the two "outliers"
+
+
+```{r}
+pixarfilter <- pixarnew %>%  
+  filter(run_time < 130)
+```
+
+```{r}
+ggplot(pixarfilter, aes(x = years_since_release, y = run_time)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +
+  labs(title = "Do Pixar Films Get Longer Over Time?", y = "RunTime", x = "Years Since Release")
+
+```
+
+Still appears to be a negative relationship! 
+
+Overall, I think this was a fun little experiment. However, I was hoping that there was going to be more to the data like info about characters(male/female/other? animal/human? princess? etc.), themes of plots, viewer ratings, directors, or funding. Nevertheless, explored the data and made some cool graphs! 
