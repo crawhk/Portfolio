@@ -10,9 +10,8 @@ library(tidyr)
 library(tidyverse)
 ```
 
-
 ```{r}
-Thesis <- read_spss("C:/Users/crawl/OneDrive/Documents/GitHub/Portfolio/ThesisAllDataNew.sav")
+ThesisMod <- read_spss("C:/Users/crawl/OneDrive - Wake Forest University/GitHub/Portfolio/DT Lie Scenario Data.sav")
 ```
 
 ```{r}
@@ -21,18 +20,35 @@ library(lmerTest)
 ```
 
 ```{r}
-model <- lmer(OverallLieAvg ~ DTTotalC * Scenario + 
-              (1 | Person) + 
-              (1 | Scenario), 
-              data = Thesis)
+
+model <- lmer(LieAvg ~ DTTotalC * Scenario 
+              + (1 | Person), data = ThesisMod)
+summary(model)
+
+```
+I got the same results in SPSS for my thesis! That was expected, now I would like to graph this... which would have come in handy weeks ago, but we were limited on time. 
+
+
+```{r}
+library(ggeffects)
+library(ggplot2)
 ```
 
+```{R}
+# Generate predicted values from model
+pred <- ggpredict(model, terms = c("DTTotalC", "Scenario"))
+```
 
-
-
-
-
-
+```{r}
+ggplot(pred, aes(x = x, y = predicted, color = group)) +
+  geom_line(size = 1) +
+  labs(x = "Dark Triad", 
+       y = "Predicted Lying", 
+       color = "Scenario", 
+       fill = "Scenario", 
+       title = "DT–Lying Relationship Moderated by Scenario")
+```
+These lines look to be relatively parallel, though not perfect. I am curious as to if a sample had very high levels of DT traits if this moderation would be different. 
 
 
 
