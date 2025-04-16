@@ -50,9 +50,52 @@ ggplot(pred, aes(x = x, y = predicted, color = group)) +
 ```
 These lines look to be relatively parallel, though not perfect. I am curious as to if a sample had very high levels of DT traits if this moderation would be different. 
 
+Here is my data mapped on to the prediciton lines.
+
+```{r}
+ggplot(pred, aes(x = x, y = predicted, color = group)) +
+  geom_line(size = 1) +
+  geom_jitter(data = ThesisMod, aes(x = DTTotalC, y = LieAvg, color = as.factor(Scenario)), 
+             alpha = 0.3, size = 1.5, inherit.aes = FALSE) + 
+  labs(x = "Dark Triad", 
+       y = "Predicted Lying", 
+       color = "Scenario", 
+       fill = "Scenario", 
+       title = "DT–Lying Relationship Moderated by Scenario")
+```
+It appears that there is more variability in lying in the romantic partner scenario (0) which is what I saw in my box and wisker plot in my thesis!
 
 
 
+
+```{r}
+
+pred1 <- ggpredict(model, terms = c("DTTotalC [-5:5 by=0.1]", "Scenario"))
+
+ggplot(pred1, aes(x = x, y = predicted, color = group)) +
+  geom_line(size = 1.2) +
+  labs(x = "Dark Triad", 
+       y = "Predicted Lying", 
+       color = "Scenario", 
+       title = "DT–Lying Relationship Moderated by Scenario") 
+```
+
+It certainly seems that at higher levels of the DT traits - there is convergence between the lines... 
+
+
+```{r}
+
+pred2 <- ggpredict(model, terms = c("DTTotalC [-10:10 by=0.1]", "Scenario"))
+
+ggplot(pred2, aes(x = x, y = predicted, color = group)) +
+  geom_line(size = 1.2) +
+  labs(x = "Dark Triad", 
+       y = "Predicted Lying", 
+       color = "Scenario", 
+       title = "DT–Lying Relationship Moderated by Scenario") 
+```
+
+Aroung a DT score of 8.5 there is an interaction of scenario... too bad that my scale is only 1-5 :(
 
 
 
