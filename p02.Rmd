@@ -17,7 +17,7 @@ library(tidyverse)
 
 
 ```{r reading data}
-AI <- read_spss("C:/Users/crawhk23/Documents/GitHub/Portfolio/TComm AI & Human SS (Names and No Names).sav")
+AI <- read_spss("C:/Users/crawhk23/Documents/GitHub/Portfolio/DT Lie Scenario Data.sav")
 ```
 
 ```{r}

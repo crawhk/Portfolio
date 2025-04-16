@@ -1,5 +1,44 @@
 ---
-title: "Portfolio 6"
+title: "Portfolio 6 - Thesis Moderation"
 ---
 
-> The projects should be numbered consecutively (i.e., in the order in which you began them), and should include for each project a description of the goal, the product (computer program, hand graph, computer graph, etc.), the data, and some interpretation. Reports must be reproducible and of high quality in terms of writing, grammar, presentation, etc.
+> For my thesis, I conducted a multi-level moderation. I originally did all of my anaylses in SPSS. However, I could not graph it correctly in SPSS. The goal here is to attempt (I am unsure of the success of this venture) to run this analysis and graph it in R. 
+
+```{r}
+library(haven)
+library(tidyr)
+library(tidyverse)
+```
+
+
+```{r}
+Thesis <- read_spss("C:/Users/crawl/OneDrive/Documents/GitHub/Portfolio/ThesisAllDataNew.sav")
+```
+
+```{r}
+library(lme4)
+library(lmerTest)
+```
+
+```{r}
+model <- lmer(OverallLieAvg ~ DTTotalC * Scenario + 
+              (1 | Person) + 
+              (1 | Scenario), 
+              data = Thesis)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
