@@ -284,21 +284,100 @@ C and B are similar in Acidity and Bitterness
 
 ## Predicting the Perfect Cup
 
+### Demographic Variables 
 
 ```{r}
+demo_model <- multinom(prefer_overall ~ gender + employment_status + education_level +
+                       political_affiliation + ethnicity_race + number_children,
+                       data = coffee_survey)
 
-coffeepred <- multinom(prefer_overall ~
-                          coffee_a_bitterness + coffee_a_acidity + coffee_a_personal_preference +
-                          coffee_b_bitterness + coffee_b_acidity + coffee_b_personal_preference +
-                          coffee_c_bitterness + coffee_c_acidity + coffee_c_personal_preference +
-                          coffee_d_bitterness + coffee_d_acidity + coffee_d_personal_preference +
-                          strength + brew + age,
-                        data = df_model)
+```
+```{r}
+summary(demo_model)
+```
+Employment, ethnicity, number of children -- strongest predictors 
+Gender and edu are not strong predictors 
 
-summary(multi_model)
+Model overall does not do well (high AIC/deviance)
+
+### Coffee Variables 
+```{r}
+library(nnet)
+
+coffee_survey <- coffee_survey %>%
+  mutate(prefer_overall = factor(prefer_overall))
+
+```
+
+```{r}
+coffee_model <- multinom(prefer_overall ~ 
+                           coffee_a_bitterness + coffee_a_acidity + coffee_a_personal_preference +
+                           coffee_b_bitterness + coffee_b_acidity + coffee_b_personal_preference +
+                           coffee_c_bitterness + coffee_c_acidity + coffee_c_personal_preference +
+                           coffee_d_bitterness + coffee_d_acidity + coffee_d_personal_preference,
+                         data = coffee_survey)
+
+```
+```{r}
+summary(coffee_model)
+
+```
+People prefer coffees that fit personal preference (not surprising) with bitterness and acidity less important in predictions 
+Each coeff shows that a 1-unit increase in that variable affects the log-odds of someone preferring Coffee B, C, or D instead of Coffee A.
+
+```{r}
+coffee_modelb <- multinom(prefer_overall ~ 
+                           coffee_a_bitterness + coffee_a_acidity +
+                           coffee_b_bitterness + coffee_b_acidity +
+                           coffee_c_bitterness + coffee_c_acidity + 
+                           coffee_d_bitterness + coffee_d_acidity,
+                         data = coffee_survey)
+```
+```{r}
+summary(coffee_modelb)
+```
+This model preforms much worse than the other model with personal preference - suggesting that bitterness and acidity don't do a good job of predicting. 
+ 
+Suggests:
+- personal preference is more important and that bitterness and acidity aren't necessarily important for choosing fav coffee
+- high bitterness of coffee A pushes people towards the other 3 coffees - specifically D 
+```{r}
+coffee_survey %>%
+  count(prefer_overall) %>%
+  arrange(desc(n))
 ```
 
 
+### All Variables
 
 
+```{r}
+full_model <- multinom(prefer_overall ~ 
+                         coffee_a_bitterness + coffee_a_acidity + coffee_a_personal_preference +
+                         coffee_b_bitterness + coffee_b_acidity + coffee_b_personal_preference +
+                         coffee_c_bitterness + coffee_c_acidity + coffee_c_personal_preference +
+                         coffee_d_bitterness + coffee_d_acidity + coffee_d_personal_preference +
+                         gender + employment_status + education_level + number_children +
+                         political_affiliation + ethnicity_race,
+                       data = coffee_survey)
+summary(full_model)
+```
 
+Compared to Coffee A ... 
+
+The strongest predictor was personal preference ratings for each coffee 
+
+Demographics -- ethnicity, number of children, and employment type are moderate predictors 
+
+Gender -- gender (except prefer not to say), acidity, bitterness were weak predictors 
+
+Notable effects: 
+- personal preference is still the most important 
+- beyond "prefer not to say" there are small gender effects 
+- those who are retired are more likely to choose coffee B, students are less likely to choose B, and homemakers are more likely to choose C compared to A 
+- those with lower levels of edu were more likely to choose B or C where those with doctorate and masters are less likely to choose those compared to A 
+- those with 3 + children are less likely to choose C or D 
+- Republicans and independents are more likely to choose B/C and B, respectively 
+- Hispanic/latino (strongly likely to choose B and C, over A); Black (less likely to prefer coffees B, C, D, over A); white (slightly less likely to choose C and D over A)
+
+Full little Tidy Tues dataset exploration :)
