@@ -2,4 +2,217 @@
 title: "Portfolio 7"
 ---
 
-> The projects should be numbered consecutively (i.e., in the order in which you began them), and should include for each project a description of the goal, the product (computer program, hand graph, computer graph, etc.), the data, and some interpretation. Reports must be reproducible and of high quality in terms of writing, grammar, presentation, etc.
+> The goal of this project is to explore the Great American Coffee Tasting data set from Tidy Tuesday.
+
+```{r}
+library(tidytuesdayR)
+```
+
+```{r}
+tuesdata <- tidytuesdayR::tt_load(2024, week = 20)
+
+coffee_survey <- tuesdata$coffee_survey
+```
+## Coffee Drinker's Demographics
+
+```{r}
+library(tidyverse)
+library(cluster)
+library(dplyr)
+library(ggplot2)
+```
+
+Let's see if coffee drinking habits vary by a variety of factors including: gender, employment status, education, number of children, political affiliation, and ethnicity. 
+
+### Gender
+
+```{r}
+ggplot(coffee_survey, aes(x = cups, fill = gender)) +
+  geom_bar() +
+  labs(title = "Coffee Consumption by Gender",
+       x = "Cups per Day", y = "Count", fill = "Gender") +
+  theme_minimal()
+
+```
+
+```{r}
+ggplot(coffee_survey, aes(x = cups, fill = gender)) +
+  geom_bar(position = "fill") +  # stack bars by proportion
+  labs(title = "Coffee Consumption by Gender (Proportions)",
+       x = "Cups per Day", y = "Proportion") +
+  theme_minimal()
+
+
+```
+```{r}
+ggplot(coffee_survey, aes(x = cups)) +
+  geom_bar(fill = "steelblue") +
+  facet_wrap(~ gender) +
+  labs(title = "Cups of Coffee per Day by Gender",
+       x = "Cups per Day", y = "Count") +
+  theme_minimal()
+
+```
+
+```{r}
+coffee_survey %>% 
+  count(gender, cups) %>% 
+  arrange(cups, gender)
+```
+
+
+```{r}
+bycups <- coffee_survey %>%
+  mutate(
+    cups_numeric = case_when(
+      cups == "Less than 1" ~ 0.5,
+      cups == "More than 4" ~ 5,
+      str_detect(cups, "^[0-9]+$") ~ as.numeric(cups),
+      TRUE ~ NA_real_
+    )
+  )
+```
+
+```{r}
+bycups %>%
+  group_by(gender) %>%
+  summarise(
+    average_cups = mean(cups_numeric, na.rm = TRUE),
+    n = n()
+  ) %>%
+  arrange(desc(average_cups))
+
+```
+
+It appears that a greater number of males tend to drink coffee than any other gender category. However, those who indicated "Other" as their gender tended to drink a greater number of cups than the other groups. 
+
+## Employment and Education 
+
+```{r}
+bycups %>%
+  group_by(employment_status) %>%
+  summarise(
+    average_cups = mean(cups_numeric, na.rm = TRUE),
+    n = n()
+  ) %>%
+  arrange(desc(average_cups))
+
+```
+
+Those who are retired drink the greatest number of cups of coffee - which surprised me since I associate coffee with work and productivity. However, those who are employed full time make up the largest portion of the sample and drink roughly 1.82 cups of coffee a day on average. 
+
+```{r}
+bycups %>%  
+  group_by(employment_status) %>%
+  summarise(average_cups = mean(cups_numeric, na.rm = TRUE)) %>%
+  ggplot(aes(x = reorder(employment_status, -average_cups), y = average_cups)) +
+  geom_bar(stat = "identity", fill = "lightblue") +
+  labs(title = "Average Cups per Day by Employment Status",
+       x = "Employment Status", y = "Average Cups per Day") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+```{r}
+bycups %>% 
+  group_by(education_level) %>%
+  summarise(
+    average_cups = mean(cups_numeric, na.rm = TRUE),
+    n = n()
+  ) %>%
+  arrange(desc(average_cups))
+
+```
+The majority of individuals have a Bachelor's degree - drinking on average 1.72 cups a coffee a day. Those with Doctorate or professional degrees drink the most coffee on average at 1.93 cups a day. 
+
+```{r}
+bycups %>%  
+    group_by(education_level) %>%
+  summarise(average_cups = mean(cups_numeric, na.rm = TRUE)) %>%
+  ggplot(aes(x = reorder(education_level, -average_cups), y = average_cups)) +
+  geom_bar(stat = "identity", fill = "lightblue") +
+  labs(title = "Average Cups per Day by Education Level",
+       x = "Education Level", y = "Average Cups per Day") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+## Number of Children 
+
+```{r}
+bycups %>%
+  group_by(number_children) %>%
+  summarise(
+    average_cups = mean(cups_numeric, na.rm = TRUE),
+    n = n()
+  ) %>%
+  arrange(number_children)
+
+```
+```{r}
+bycups %>%
+  group_by(number_children) %>%
+  summarise(average_cups = mean(cups_numeric, na.rm = TRUE)) %>%
+  ggplot(aes(x = factor(number_children), y = average_cups)) +
+  geom_bar(stat = "identity", fill = "lightblue") +
+  labs(title = "Average Cups per Day by Number of Children",
+       x = "Number of Children", y = "Average Cups per Day") +
+  theme_minimal()
+
+```
+
+Looks like those who have 3 or more children are more likely to consume more coffee on average, as compared to those with fewer children. 
+
+
+## Political Affiliation 
+
+```{r}
+bycups %>%
+  group_by(political_affiliation) %>%
+  summarise(
+    average_cups = mean(cups_numeric, na.rm = TRUE),
+    n = n()
+  ) %>%
+  arrange(desc(average_cups))
+
+```
+
+```{r}
+bycups %>%
+  group_by(political_affiliation) %>%
+  summarise(average_cups = mean(cups_numeric, na.rm = TRUE)) %>%
+  ggplot(aes(x = reorder(political_affiliation, -average_cups), y = average_cups)) +
+  geom_bar(stat = "identity", fill = "lightblue") +
+  labs(title = "Average Cups per Day by Political Affiliation",
+       x = "Political Affiliation", y = "Average Cups per Day") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+```
+
+It looks like Republicans and Independents drink roughly the same amount of coffee. Democrats tend to drink slightly less coffee. 
+
+## Ethnicity 
+```{r}
+bycups %>%
+  group_by(ethnicity_race) %>%
+  summarise(
+    average_cups = mean(cups_numeric, na.rm = TRUE),
+    n = n()
+  ) %>%
+  arrange(desc(average_cups))
+
+```
+```{r}
+bycups %>%
+  group_by(ethnicity_race) %>%
+  summarise(average_cups = mean(cups_numeric, na.rm = TRUE)) %>%
+  ggplot(aes(x = reorder(ethnicity_race, -average_cups), y = average_cups)) +
+  geom_bar(stat = "identity", fill = "lightblue") +
+  labs(title = "Average Cups per Day by Ethnicity",
+       x = "Ethnicity", y = "Average Cups per Day") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+```
+Native American/Alaska Native individuals tend to drink the most cups of coffee on average! 
