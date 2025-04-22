@@ -216,3 +216,73 @@ bycups %>%
 
 ```
 Native American/Alaska Native individuals tend to drink the most cups of coffee on average! 
+
+## Preferred Coffee and Coffee Profiles 
+
+```{r}
+coffee_survey %>%
+  count(prefer_overall) %>%
+  ggplot(aes(x = prefer_overall, y = n, fill = prefer_overall)) +
+  geom_bar(stat = "identity") +
+  labs(title = "Most Preferred Coffee (Overall Taste)",
+       x = "Coffee Sample", y = "Number of People") +
+  theme_minimal() +
+  theme(legend.position = "none")
+
+```
+The sample far preferred Coffee D - now I want to try the coffees...
+
+
+```{r}
+# Prepare data
+coffee_long <- coffee_survey %>%
+  summarise(
+    A_bit = mean(coffee_a_bitterness, na.rm = TRUE),
+    A_acid = mean(coffee_a_acidity, na.rm = TRUE),
+    A_pref = mean(coffee_a_personal_preference, na.rm = TRUE),
+    B_bit = mean(coffee_b_bitterness, na.rm = TRUE),
+    B_acid = mean(coffee_b_acidity, na.rm = TRUE),
+    B_pref = mean(coffee_b_personal_preference, na.rm = TRUE),
+    C_bit = mean(coffee_c_bitterness, na.rm = TRUE),
+    C_acid = mean(coffee_c_acidity, na.rm = TRUE),
+    C_pref = mean(coffee_c_personal_preference, na.rm = TRUE),
+    D_bit = mean(coffee_d_bitterness, na.rm = TRUE),
+    D_acid = mean(coffee_d_acidity, na.rm = TRUE),
+    D_pref = mean(coffee_d_personal_preference, na.rm = TRUE)
+  ) %>%
+  pivot_longer(cols = everything(), names_to = "coffee_attr", values_to = "rating") %>%
+  separate(coffee_attr, into = c("coffee", "attribute"), sep = "_")
+
+```
+
+
+```{r}
+ggplot(coffee_long, aes(x = attribute, y = rating, fill = coffee)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(title = "Average Ratings for Each Coffee Sample",
+       x = "Attribute", y = "Average Rating") +
+  theme_minimal()
+```
+Coffee D - the preferred coffee - is the most acidic and not particularly bitter. Coffee D and A have similar ratings although as seen above, more people preferred coffee D.
+
+
+
+```{r}
+ggplot(coffee_long, aes(x = attribute, y = rating, fill = attribute)) +
+  geom_col() +
+  facet_wrap(~ coffee) +
+  labs(title = "Attribute Ratings per Coffee Sample",
+       x = "Attribute", y = "Average Rating") +
+  theme_minimal()
+
+```
+
+Here is a profile of each coffee: 
+A and D are similar in Acidity and Bitterness 
+C and B are similar in Acidity and Bitterness 
+
+
+
+
+
+
