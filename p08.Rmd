@@ -1,5 +1,102 @@
 ---
-title: "Portfolio 8"
+title: "Portfolio 8 - Thesis EVT Correlations"
 ---
 
-> The projects should be numbered consecutively (i.e., in the order in which you began them), and should include for each project a description of the goal, the product (computer program, hand graph, computer graph, etc.), the data, and some interpretation. Reports must be reproducible and of high quality in terms of writing, grammar, presentation, etc.
+> The goal of this project is to run and graph the Expectancy-Value theory correalations for my thesis. 
+
+```{r}
+library(haven)
+library(tidyr)
+library(tidyverse)
+```
+
+
+
+```{r}
+Thesis <- read_spss("C:/Users/crawl/OneDrive/Documents/GitHub/Portfolio/ThesisAllDataNew.sav")
+```
+
+
+### Hypothesis 1 
+> Lying, AV, OV 
+
+```{r}
+  cor.test(Thesis$RPLieAvg, Thesis$RP_AV, method = "pearson")
+```
+```{r}
+library(ggplot)
+```
+
+```{r}
+ggplot(Thesis, aes(x = RPLieAvg, y = RP_AV)) +
+  geom_jitter(alpha = 0.3) + 
+  geom_smooth(method = "lm", se = TRUE) +  
+  labs(
+    x = "RP Lying Average (RPLieAvg)",
+    y = "RP Action Value (RPAV)",
+    title = "Correlation between RPLieAverage and AV"
+  ) +
+  theme_minimal()
+```
+
+
+```{r}
+  cor.test(Thesis$RPLieAvg, Thesis$RP_OV, method = "pearson")
+```
+
+```{r}
+ggplot(Thesis, aes(x = RPLieAvg, y = RP_OV)) +
+  geom_jitter(alpha = 0.3) + 
+  geom_smooth(method = "lm", se = TRUE) +  
+  labs(
+    x = "RP Lying Average (RPLieAvg)",
+    y = "RP Outcome Value (RPOV)",
+    title = "Correlation between RPLieAverage and OV"
+  ) +
+  theme_minimal()
+```
+
+
+
+
+```{r}
+  cor.test(Thesis$TDLieAvg, Thesis$TD_AV, method = "pearson")
+```
+
+```{r}
+ggplot(Thesis, aes(x = TDLieAvg, y = TD_AV)) +
+  geom_jitter(alpha = 0.3) + 
+  geom_smooth(method = "lm", se = TRUE) +  
+  labs(
+    x = "TD Lying Average (TDLieAvg)",
+    y = "TD Action Value (TDAV)",
+    title = "Correlation between TDLieAverage and AV"
+  ) +
+  theme_minimal()
+```
+
+```{r}
+  cor.test(Thesis$TDLieAvg, Thesis$TD_OV, method = "pearson")
+```
+
+```{r}
+ggplot(Thesis, aes(x = TDLieAvg, y = TD_OV)) +
+  geom_jitter(alpha = 0.3) + 
+  geom_smooth(method = "lm", se = TRUE) +  
+  labs(
+    x = "TD Lying Average (TDLieAvg)",
+    y = "TD Outcome Value (TDOV)",
+    title = "Correlation between TDLieAverage and OV"
+  ) +
+  theme_minimal()
+```
+
+To the degree that an individual values the act of attempting to deceive others and successfully deceiving others they are more inclined to lie. 
+
+### Hypothesis 2 
+> Lying and EBL 
+
+
+Individuals are more likely to lie in a given situation if they believe that their most valued goals will be accomplished via deception. 
+
+### Hypothesis 3 
