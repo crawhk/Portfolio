@@ -10,10 +10,10 @@ library(tidyr)
 library(tidyverse)
 ```
 
-
+"C:\Users\crawl\OneDrive - Wake Forest University\GitHub\Portfolio\ThesisAllDataNewNew.sav"
 
 ```{r}
-Thesis <- read_spss("C:/Users/crawl/OneDrive/Documents/GitHub/Portfolio/ThesisAllDataNewNew.sav")
+Thesis <- read_spss("C:/Users/crawl/OneDrive - Wake Forest University/GitHub/Portfolio/ThesisAllDataNewNew.sav")
 ```
 
 
@@ -98,16 +98,16 @@ To the degree that an individual values the act of attempting to deceive others 
 
 
 ```{r}
-  cor.test(Thesis$RPLieAvg, Thesis$RP_CVxOCE, method = "pearson")
+  cor.test(Thesis$RPLieAvg, Thesis$RP_PLE_FC, method = "pearson")
 ```
 
 ```{r}
-ggplot(Thesis, aes(x = RPLieAvg, y = RP_CVxOCE)) +
+ggplot(Thesis, aes(x = RPLieAvg, y = RP_PLE_FC)) +
   geom_jitter(alpha = 0.3) + 
   geom_smooth(method = "lm", se = TRUE) +  
   labs(
     x = "RP Lying Average (RPLieAvg)",
-    y = "RP Outcome Value (RP_CVxOCE)",
+    y = "RP EBL",
     title = "Correlation between RPLieAverage and the Expected Benefit of Lying"
   ) +
   theme_minimal()
@@ -115,16 +115,16 @@ ggplot(Thesis, aes(x = RPLieAvg, y = RP_CVxOCE)) +
 
 
 ```{r}
-  cor.test(Thesis$TDLieAvg, Thesis$TD_CVxOCE, method = "pearson")
+  cor.test(Thesis$TDLieAvg, Thesis$TD_PLE_FC, method = "pearson")
 ```
 
 ```{r}
-ggplot(Thesis, aes(x = TDLieAvg, y = TD_CVxOCE)) +
+ggplot(Thesis, aes(x = TDLieAvg, y = TD_PLE_FC)) +
   geom_jitter(alpha = 0.3) + 
   geom_smooth(method = "lm", se = TRUE) +  
   labs(
     x = "TD Lying Average (TDLieAvg)",
-    y = "TD Outcome Value (TD_CVxOCE)",
+    y = "TD PLE",
     title = "Correlation between TDLieAverage and the Expected Benefit of Lying"
   ) +
   theme_minimal()
@@ -132,4 +132,23 @@ ggplot(Thesis, aes(x = TDLieAvg, y = TD_CVxOCE)) +
 
 Individuals are more likely to lie in a given situation if they believe that their most valued goals will be accomplished via deception. 
 
+### Hypothesis 3 
 
+```{r}
+model1_step1 <- lm(RPLieAvg ~ RP_PLE_FC + RP_AOE_C, data = Thesis)
+summary(model1_step1)
+
+model1_step2 <- lm(RPLieAvg ~ RP_PLE_FC + RP_AOE_C + RP_Int, data = Thesis)
+summary(model1_step2)
+```
+
+```{r}
+model2_step1 <- lm(TDLieAvg ~ TD_PLE_FC + TD_AOE_C, data = Thesis)
+summary(model2_step1)
+
+
+model2_step2 <- lm(TDLieAvg ~ TD_PLE_FC + TD_AOE_C + TD_Int, data = Thesis)
+summary(model2_step2)
+```
+
+Sig positive slope for interactions in each scenario - individual with a high AOE is significantly more likely to lie, compared to an individual with a low AOE, because they perceive there to be a stronger connection between the expected benefit of lying (EBL) and deception itself. 
