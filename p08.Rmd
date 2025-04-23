@@ -97,6 +97,39 @@ To the degree that an individual values the act of attempting to deceive others 
 > Lying and EBL 
 
 
+```{r}
+  cor.test(Thesis$RPLieAvg, Thesis$RP_CVxOCE, method = "pearson")
+```
+
+```{r}
+ggplot(Thesis, aes(x = RPLieAvg, y = RP_CVxOCE)) +
+  geom_jitter(alpha = 0.3) + 
+  geom_smooth(method = "lm", se = TRUE) +  
+  labs(
+    x = "RP Lying Average (RPLieAvg)",
+    y = "RP Outcome Value (RP_CVxOCE)",
+    title = "Correlation between RPLieAverage and the Expected Benefit of Lying"
+  ) +
+  theme_minimal()
+```
+
+
+```{r}
+  cor.test(Thesis$TDLieAvg, Thesis$TD_CVxOCE, method = "pearson")
+```
+
+```{r}
+ggplot(Thesis, aes(x = TDLieAvg, y = TD_CVxOCE)) +
+  geom_jitter(alpha = 0.3) + 
+  geom_smooth(method = "lm", se = TRUE) +  
+  labs(
+    x = "TD Lying Average (TDLieAvg)",
+    y = "TD Outcome Value (TD_CVxOCE)",
+    title = "Correlation between TDLieAverage and the Expected Benefit of Lying"
+  ) +
+  theme_minimal()
+```
+
 Individuals are more likely to lie in a given situation if they believe that their most valued goals will be accomplished via deception. 
 
 ### Hypothesis 3 
