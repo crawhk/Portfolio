@@ -13,7 +13,7 @@ library(tidyverse)
 
 
 ```{r}
-Thesis <- read_spss("C:/Users/crawl/OneDrive/Documents/GitHub/Portfolio/ThesisAllDataNew.sav")
+Thesis <- read_spss("C:/Users/crawl/OneDrive/Documents/GitHub/Portfolio/ThesisAllDataNewNew.sav")
 ```
 
 
@@ -132,4 +132,4 @@ ggplot(Thesis, aes(x = TDLieAvg, y = TD_CVxOCE)) +
 
 Individuals are more likely to lie in a given situation if they believe that their most valued goals will be accomplished via deception. 
 
-### Hypothesis 3 
+
