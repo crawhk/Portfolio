@@ -1,6 +1,54 @@
 ---
-title: "Portfolio 9 "
+title: "Portfolio 9 - Word Cloud"
 ---
 
-> The goal of this project is to run the correlations for my thesis and plot the relationships. 
+> The goal of this project is to create a WFU word cloud! (I needed some fun)
+
+```{r}
+library(wordcloud2)
+library(RColorBrewer)
+```
+
+```{r}
+
+words <- c("WFU", "WakeForestUniversity", "OldGold", "ProHumanitate", "GoDeacs!", "DemonDeacons", "Winston-Salem", "Wake", "Magnolia", "Greene", "Psychology", "M.A.", "N.C.", "Black", "WaitChapel", "Reynolda", "GradSchool", "Research", "CamelCity", "TwinCity")
+```
+
+
+```{r}
+word_freq_df <- data.frame(word = words, freq = 1)
+
+```
+
+
+```{r}
+black_gold_colors <- c(
+  "#000000", # Black
+  "#333333", # Dark Gray
+  "#666666", # Medium Gray
+  "#FFD700", # Gold
+  "#FFC300", # Lighter Gold
+  "#B8860B"  # Dark Goldenrod
+)
+```
+
+
+
+```{r}
+wordcloud2(data = word_freq_df, 
+           size = 0.3, 
+           color = rep(black_gold_colors, length.out = nrow(word_freq_df)), 
+           backgroundColor = "white")
+```
+Ta-Da! Much easier than I thought it would be! 
+
+
+
+
+
+
+
+
+
+
 

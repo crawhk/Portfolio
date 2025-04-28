@@ -11,9 +11,9 @@
 
 
 
-<title>Portfolio 9</title>
+<title>Portfolio 9 - Word Cloud</title>
 
-<script src="site_libs/header-attrs-2.13/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.29/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
@@ -32,6 +32,12 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet" />
+<script src="site_libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+<link href="site_libs/wordcloud2-0.0.1/wordcloud.css" rel="stylesheet" />
+<script src="site_libs/wordcloud2-0.0.1/wordcloud2-all.js"></script>
+<script src="site_libs/wordcloud2-0.0.1/hover.js"></script>
+<script src="site_libs/wordcloud2-binding-0.2.1/wordcloud2.js"></script>
 
 <style type="text/css">
   code{white-space: pre-wrap;}
@@ -141,11 +147,15 @@ $(document).ready(function () {
     href = "index.html";
   var menuAnchor = $('a[href="' + href + '"]');
 
-  // mark it active
-  menuAnchor.tab('show');
-
-  // if it's got a parent navbar menu mark it active as well
-  menuAnchor.closest('li.dropdown').addClass('active');
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
 
   // Navbar adjustments
   var navHeight = $(".navbar").first().height() + 15;
@@ -174,8 +184,8 @@ $(document).ready(function () {
   border-radius: 4px;
 }
 
-.tabset-dropdown > .nav-tabs > li.active:before {
-  content: "";
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
   font-family: 'Glyphicons Halflings';
   display: inline-block;
   padding: 10px;
@@ -183,16 +193,9 @@ $(document).ready(function () {
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
-  content: "&#xe258;";
-  border: none;
-}
-
-.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
-  content: "";
+  content: "\e258";
   font-family: 'Glyphicons Halflings';
-  display: inline-block;
-  padding: 10px;
-  border-right: 1px solid #ddd;
+  border: none;
 }
 
 .tabset-dropdown > .nav-tabs > li.active {
@@ -293,18 +296,33 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">Portfolio 9</h1>
+<h1 class="title toc-ignore">Portfolio 9 - Word Cloud</h1>
 
 </div>
 
 
 <blockquote>
-<p>The projects should be numbered consecutively (i.e., in the order in
-which you began them), and should include for each project a description
-of the goal, the product (computer program, hand graph, computer graph,
-etc.), the data, and some interpretation. Reports must be reproducible
-and of high quality in terms of writing, grammar, presentation, etc.</p>
+<p>The goal of this project is to create a WFU word cloud! (I needed
+some fun)</p>
 </blockquote>
+<pre class="r"><code>library(wordcloud2)
+library(RColorBrewer)</code></pre>
+<pre class="r"><code>words &lt;- c(&quot;WFU&quot;, &quot;WakeForestUniversity&quot;, &quot;OldGold&quot;, &quot;ProHumanitate&quot;, &quot;GoDeacs!&quot;, &quot;DemonDeacons&quot;, &quot;Winston-Salem&quot;, &quot;Wake&quot;, &quot;Magnolia&quot;, &quot;Greene&quot;, &quot;Psychology&quot;, &quot;M.A.&quot;, &quot;N.C.&quot;, &quot;Black&quot;, &quot;WaitChapel&quot;, &quot;Reynolda&quot;, &quot;GradSchool&quot;, &quot;Research&quot;, &quot;CamelCity&quot;, &quot;TwinCity&quot;)</code></pre>
+<pre class="r"><code>word_freq_df &lt;- data.frame(word = words, freq = rep(1, length(words)))</code></pre>
+<pre class="r"><code>black_gold_colors &lt;- c(
+  &quot;#000000&quot;, # Black
+  &quot;#333333&quot;, # Dark Gray
+  &quot;#666666&quot;, # Medium Gray
+  &quot;#FFD700&quot;, # Gold
+  &quot;#FFC300&quot;, # Lighter Gold
+  &quot;#B8860B&quot;  # Dark Goldenrod
+)</code></pre>
+<pre class="r"><code>wordcloud2(word_freq_df, 
+           size = 0.8,
+           color = black_gold_colors,
+           backgroundColor = &quot;white&quot;)</code></pre>
+<div class="wordcloud2 html-widget html-fill-item" id="htmlwidget-7f71fbae55ebbd3d179d" style="width:672px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-7f71fbae55ebbd3d179d">{"x":{"word":["WFU","WakeForestUniversity","OldGold","ProHumanitate","GoDeacs!","DemonDeacons","Winston-Salem","Wake","Magnolia","Greene","Psychology","M.A.","N.C.","Black","WaitChapel","Reynolda","GradSchool","Research","CamelCity","TwinCity"],"freq":[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],"fontFamily":"Segoe UI","fontWeight":"bold","color":["#000000","#333333","#666666","#FFD700","#FFC300","#B8860B"],"minSize":0,"weightFactor":144,"backgroundColor":"white","gridSize":0,"minRotation":-0.7853981633974483,"maxRotation":0.7853981633974483,"shuffle":true,"rotateRatio":0.4,"shape":"circle","ellipticity":0.65,"figBase64":null,"hover":null},"evals":[],"jsHooks":{"render":[{"code":"function(el,x){\n                        console.log(123);\n                        if(!iii){\n                          window.location.reload();\n                          iii = False;\n\n                        }\n  }","data":null}]}}</script>
 
 
 
