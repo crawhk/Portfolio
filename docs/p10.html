@@ -11,9 +11,9 @@
 
 
 
-<title>Portfolio 10</title>
+<title>Portfolio 10 - BEES</title>
 
-<script src="site_libs/header-attrs-2.13/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.29/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
@@ -141,11 +141,15 @@ $(document).ready(function () {
     href = "index.html";
   var menuAnchor = $('a[href="' + href + '"]');
 
-  // mark it active
-  menuAnchor.tab('show');
-
-  // if it's got a parent navbar menu mark it active as well
-  menuAnchor.closest('li.dropdown').addClass('active');
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
 
   // Navbar adjustments
   var navHeight = $(".navbar").first().height() + 15;
@@ -174,8 +178,8 @@ $(document).ready(function () {
   border-radius: 4px;
 }
 
-.tabset-dropdown > .nav-tabs > li.active:before {
-  content: "";
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
   font-family: 'Glyphicons Halflings';
   display: inline-block;
   padding: 10px;
@@ -183,16 +187,9 @@ $(document).ready(function () {
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
-  content: "&#xe258;";
-  border: none;
-}
-
-.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
-  content: "";
+  content: "\e258";
   font-family: 'Glyphicons Halflings';
-  display: inline-block;
-  padding: 10px;
-  border-right: 1px solid #ddd;
+  border: none;
 }
 
 .tabset-dropdown > .nav-tabs > li.active {
@@ -293,109 +290,191 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">Portfolio 10</h1>
+<h1 class="title toc-ignore">Portfolio 10 - BEES</h1>
 
 </div>
 
 
 <blockquote>
-<p>The projects should be numbered consecutively (i.e., in the order in
-which you began them), and should include for each project a description
-of the goal, the product (computer program, hand graph, computer graph,
-etc.), the data, and some interpretation. Reports must be reproducible
-and of high quality in terms of writing, grammar, presentation, etc.</p>
+<p>So - fun fact … I am obsessed with bees. Absolutely love them, raised
+a couple honey bee colonies for a while… I can give you a lot of nerdy
+information that no one needs to know (other than apiarist). BUT, we are
+currently facing a national bee crisis - there has been a 60-70% loss of
+our bee population. The bees are in their worst state and this has been
+the largest loss in recorded history. Hence - I wanted to play around
+with this Tidy Tuesday data!</p>
 </blockquote>
-<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
-hendrerit purus ut dapibus vestibulum. Suspendisse potenti. Cras
-faucibus mauris in leo condimentum lobortis. Cras euismod sollicitudin
-augue, ut venenatis quam placerat eu. Maecenas vulputate rhoncus odio,
-in interdum risus malesuada gravida. Maecenas cursus sed dui sit amet
-lacinia. Nunc dignissim metus nec ex mattis, non rutrum urna cursus.
-Morbi pretium elementum purus, in aliquet libero eleifend ac. Nam
-finibus, ligula sed ultrices pharetra, tellus risus consequat tortor,
-facilisis maximus elit lectus a metus. Sed vel dictum nulla, vitae
-blandit turpis. Integer pulvinar tempor diam ac venenatis. Vestibulum
-est lacus, suscipit et ipsum nec, consectetur iaculis leo. Morbi libero
-lacus, scelerisque non sollicitudin vitae, accumsan sed tellus.
-Suspendisse quis orci tellus.</p>
-<div id="r-markdown" class="section level2">
-<h2>R Markdown</h2>
-<p>This is an R Markdown document. Markdown is a simple formatting
-syntax for authoring HTML, PDF, and MS Word documents. For more details
-on using R Markdown see <a href="http://rmarkdown.rstudio.com"
-class="uri">http://rmarkdown.rstudio.com</a>.</p>
-<p>When you click the <strong>Knit</strong> button a document will be
-generated that includes both content as well as the output of any
-embedded R code chunks within the document. You can embed an R code
-chunk like this:</p>
-<pre class="r"><code>summary(cars)</code></pre>
-<pre><code>##      speed           dist       
-##  Min.   : 4.0   Min.   :  2.00  
-##  1st Qu.:12.0   1st Qu.: 26.00  
-##  Median :15.0   Median : 36.00  
-##  Mean   :15.4   Mean   : 42.98  
-##  3rd Qu.:19.0   3rd Qu.: 56.00  
-##  Max.   :25.0   Max.   :120.00</code></pre>
-<p>Maecenas luctus convallis efficitur. Vestibulum pharetra laoreet nibh
-non congue. Etiam ornare, neque sit amet condimentum aliquet, odio ipsum
-porttitor elit, eu malesuada turpis augue sit amet arcu. Integer nec
-quam et massa congue tincidunt. Donec sit amet diam placerat, pharetra
-quam nec, ornare nisl. Quisque erat turpis, imperdiet eget tellus non,
-interdum ultricies nisi. Fusce a erat est. Nunc sollicitudin ante non
-eros vulputate, sed eleifend nulla hendrerit. Nam ac quam nulla.
-Praesent a ligula a justo auctor tristique ac vel neque. Class aptent
-taciti sociosqu ad litora torquent per conubia nostra, per inceptos
-himenaeos. Quisque tempor felis sed lorem efficitur volutpat. Aliquam
-lectus diam, lacinia vitae velit eget, pulvinar porta massa. Curabitur
-nec egestas mi.</p>
+<pre class="r"><code>library(haven)
+library(tidyr)
+library(tidyverse)</code></pre>
+<pre><code>## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+## ✔ dplyr     1.1.4     ✔ purrr     1.0.4
+## ✔ forcats   1.0.0     ✔ readr     2.1.5
+## ✔ ggplot2   3.5.2     ✔ stringr   1.5.1
+## ✔ lubridate 1.9.4     ✔ tibble    3.2.1
+## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+## ✖ dplyr::filter() masks stats::filter()
+## ✖ dplyr::lag()    masks stats::lag()
+## ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+<pre class="r"><code>library(ggplot2)</code></pre>
+<pre class="r"><code>tuesdata &lt;- tidytuesdayR::tt_load(&#39;2022-01-11&#39;)</code></pre>
+<pre><code>## ---- Compiling #TidyTuesday Information for 2022-01-11 ----
+## --- There are 2 files available ---
+## 
+## 
+## ── Downloading files ───────────────────────────────────────────────────────────
+## 
+##   1 of 2: &quot;colony.csv&quot;
+##   2 of 2: &quot;stressor.csv&quot;</code></pre>
+<pre class="r"><code>colony &lt;- tuesdata$colony</code></pre>
+<pre class="r"><code>stressor &lt;- readr::read_csv(&#39;https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2022/2022-01-11/stressor.csv&#39;)</code></pre>
+<pre><code>## Rows: 7332 Columns: 5
+## ── Column specification ────────────────────────────────────────────────────────
+## Delimiter: &quot;,&quot;
+## chr (3): months, state, stressor
+## dbl (2): year, stress_pct
+## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<div id="colony-data" class="section level2">
+<h2>Colony Data</h2>
+<div id="tracking-colony-losses-over-time" class="section level3">
+<h3>Tracking Colony losses over time</h3>
+<pre class="r"><code>ggplot(colony, aes(x = as.numeric(year), y = colony_lost)) +
+  geom_point() + 
+   geom_smooth(method = &quot;loess&quot;, se = FALSE, color = &quot;goldenrod&quot;) +
+  labs(
+    x = &quot;Year&quot;,
+    y = &quot;Number of Colonies Lost&quot;,
+    title = &quot;Colonies Lost Over Time&quot;
+  ) +
+  theme_minimal()</code></pre>
+<pre><code>## `geom_smooth()` using formula = &#39;y ~ x&#39;</code></pre>
+<pre><code>## Warning: Removed 47 rows containing non-finite outside the scale range
+## (`stat_smooth()`).</code></pre>
+<pre><code>## Warning: Removed 47 rows containing missing values or values outside the scale range
+## (`geom_point()`).</code></pre>
+<p><img src="p10_files/figure-html/unnamed-chunk-4-1.png" width="672" />
+From this data graph it does not appear like tehre are drastic changes
+in the number of colonies lost between 2015 and 2021.</p>
 </div>
-<div id="including-plots" class="section level2">
-<h2>Including Plots</h2>
-<p>You can also embed plots, for example:</p>
-<p><img src="p10_files/figure-html/pressure-1.png" width="672" /></p>
-<p>Note that the <code>echo = FALSE</code> parameter was added to the
-code chunk to prevent printing of the R code that generated the
-plot.</p>
-<p>Morbi tincidunt mollis odio sit amet feugiat. Ut vel risus eu ante
-dictum consequat. Integer et luctus mauris. Donec nec faucibus urna, sed
-commodo risus. Nam elementum pulvinar erat, eget convallis est blandit
-vel. Etiam gravida sapien eu massa hendrerit maximus. Proin dolor quam,
-porta vitae libero non, venenatis porta tellus. Vivamus et elit a est
-aliquet consequat. Proin tempus, purus quis suscipit placerat, dui nunc
-euismod dui, sit amet luctus leo lectus in risus. Phasellus consectetur
-eleifend arcu. Nullam venenatis blandit nulla ut ullamcorper. Vestibulum
-eu arcu quis massa scelerisque sodales in ac augue. Quisque dapibus
-fringilla turpis, ut cursus tortor cursus sed. Sed facilisis quam eget
-neque viverra venenatis. Suspendisse ut lorem nec erat elementum
-bibendum. Curabitur lobortis purus in cursus blandit.</p>
-<p>Aliquam sed ex et lorem consequat feugiat at porta leo. Fusce id
-hendrerit tellus. Maecenas dictum felis neque, quis dictum metus
-tristique eu. Vivamus sed blandit nisl. Integer ut urna dolor. Cras in
-egestas eros, in aliquam nisi. Duis vitae elementum quam. Vivamus vel
-turpis commodo, porttitor urna vitae, viverra sem. Nam nec dignissim
-erat, id viverra libero. Integer vel lectus pellentesque tortor
-fringilla posuere. Vivamus quis magna accumsan, porta tortor at, aliquam
-urna. Aliquam vestibulum ante massa, ut gravida lectus sagittis
-vitae.</p>
-<p>Sed eget ipsum auctor, gravida magna sit amet, tincidunt mi. Nulla
-erat ante, volutpat nec sem eget, luctus posuere est. Praesent convallis
-nunc ac turpis bibendum, in maximus magna convallis. Vestibulum ante
-ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae;
-Sed sit amet nulla ante. Sed elit sem, lobortis nec nisi a, rhoncus
-ornare nunc. Curabitur ultrices neque feugiat, facilisis magna eu,
-consectetur magna. Mauris id eleifend ex.</p>
-<p>Morbi tincidunt mollis odio sit amet feugiat. Ut vel risus eu ante
-dictum consequat. Integer et luctus mauris. Donec nec faucibus urna, sed
-commodo risus. Nam elementum pulvinar erat, eget convallis est blandit
-vel. Etiam gravida sapien eu massa hendrerit maximus. Proin dolor quam,
-porta vitae libero non, venenatis porta tellus. Vivamus et elit a est
-aliquet consequat. Proin tempus, purus quis suscipit placerat, dui nunc
-euismod dui, sit amet luctus leo lectus in risus. Phasellus consectetur
-eleifend arcu. Nullam venenatis blandit nulla ut ullamcorper. Vestibulum
-eu arcu quis massa scelerisque sodales in ac augue. Quisque dapibus
-fringilla turpis, ut cursus tortor cursus sed. Sed facilisis quam eget
-neque viverra venenatis. Suspendisse ut lorem nec erat elementum
-bibendum. Curabitur lobortis purus in cursus blandit.</p>
+<div id="colony-health-by-state" class="section level3">
+<h3>Colony health by state</h3>
+<pre class="r"><code>colony_state &lt;- colony %&gt;%  
+  group_by(state) %&gt;% 
+  summarise(avg_pct_lost = mean (colony_lost_pct, na.rm = TRUE))</code></pre>
+<pre class="r"><code>ggplot(colony_state, aes(x = reorder(state, avg_pct_lost), y = avg_pct_lost)) +
+  geom_col(fill = &quot;goldenrod&quot;) +
+  coord_flip() +
+  labs(
+    x = &quot;State&quot;,
+    y = &quot;Average % Colonies Lost&quot;,
+    title = &quot;Average Bee Colony Loss by State&quot;
+  ) +
+  theme_minimal() +  
+  theme(
+    axis.text.y = element_text(size = 6, margin = margin(r = 5)),
+    plot.title = element_text(hjust = 0.3)
+  )</code></pre>
+<p><img src="p10_files/figure-html/unnamed-chunk-6-1.png" width="672" />
+It looks like Kansas is responsible for the largest percentage of
+colonies lost - though this may be attributable to a large bee
+population due to the agricultural nature of the state or perhaps the
+large amount of pesticides used for said agriculture may be the cause of
+the problem…</p>
+<p>New Jersey is doing pretty well.</p>
+</div>
+<div id="seasonal-impact" class="section level3">
+<h3>Seasonal Impact</h3>
+<pre class="r"><code>colony_month &lt;- colony %&gt;%
+  group_by(months) %&gt;%
+  summarize(total_colony_lost = sum(colony_lost, na.rm = TRUE))</code></pre>
+<pre class="r"><code>ggplot(colony_month, aes(x = months, y = total_colony_lost)) +
+  geom_col(fill = &quot;goldenrod&quot;) +
+  coord_flip() +
+  labs(
+    x = &quot;Month&quot;,
+    y = &quot;Colonies Lost&quot;,
+    title = &quot;Colony Loss by Month&quot;
+  ) +
+  theme_minimal() </code></pre>
+<p><img src="p10_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<p>It appears that the most colonies are lost in the colder months Oct -
+March, as would be expected. There are many reasons colonies do not make
+it through the winter including starvation, freezing to death, and
+pests. Jan-March is when the most losses are seen.</p>
+</div>
+<div id="colony-net-change" class="section level3">
+<h3>Colony Net Change</h3>
+<pre class="r"><code>colony &lt;- colony %&gt;%
+  mutate(net_change = colony_added + colony_reno - colony_lost)</code></pre>
+<pre class="r"><code>colony_year_net &lt;- colony %&gt;%
+  group_by(year) %&gt;%
+  summarize(net_change = sum(net_change, na.rm = TRUE))</code></pre>
+<pre class="r"><code>ggplot(colony_year_net, aes(x = as.numeric(year), y = net_change)) +
+  geom_point() + 
+  geom_line(color = &quot;goldenrod&quot;) +
+  labs(x = &quot;Year&quot;,
+    y = &quot;Net Change in Colonies&quot;,
+    title = &quot;Yearly Net Change in Bee Colonies&quot;
+  ) +
+  theme_minimal()</code></pre>
+<p><img src="p10_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+<p>Looking at the net change 2017 was a poor year for the bees but 2019
+was a pretty good year. From this graph it looks like bee losses have
+decreased from 2020 on … however that is far from what we are seeing
+now.</p>
+</div>
+</div>
+<div id="stressor-data" class="section level2">
+<h2>Stressor Data</h2>
+<div id="common-stressors" class="section level3">
+<h3>Common Stressors</h3>
+<pre class="r"><code>stress_sum &lt;- stressor %&gt;%  
+  group_by(stressor) %&gt;% 
+  summarize(avg_stress = mean(stress_pct, na.rm = TRUE)) %&gt;% 
+  arrange(desc(avg_stress))</code></pre>
+<pre class="r"><code>ggplot(stress_sum, aes(x = reorder(stressor, avg_stress), y = avg_stress)) +
+  geom_col(fill = &quot;goldenrod&quot;) +
+  coord_flip() +
+  labs(title = &quot;Average % of Colonies Affected by Stressor&quot;,
+       x = &quot;Stressor&quot;, y = &quot;Average % Affected&quot;) +
+  theme_minimal()</code></pre>
+<p><img src="p10_files/figure-html/unnamed-chunk-13-1.png" width="672" />
+Varroa mites are horrible - based on first hand account they cause CCD
+(colony collapse disorder) all the time. They are hard to detect, treat,
+spread like wild fire, and tear apart hives. Just in case you were
+wondering - a lot of bee keepers put bees in powdered sugar to see if
+they have mites. I would not be surprised if the mites have become an
+increasingly larger issue.</p>
+</div>
+<div id="stressors-over-time" class="section level3">
+<h3>Stressors Over Time</h3>
+<pre class="r"><code>stressor$year &lt;- as.numeric(stressor$year)</code></pre>
+<pre class="r"><code>ggplot(stressor, aes(x = year, y = stress_pct, color = stressor)) +
+  geom_smooth(se = FALSE, method = &quot;loess&quot;) +
+  labs(
+    title = &quot;Trends in Bee Colony Stressors Over Time&quot;,
+    x = &quot;Year&quot;,
+    y = &quot;% of Colonies Affected&quot;,
+    color = &quot;Stressor&quot;
+  ) +
+  theme_minimal()</code></pre>
+<pre><code>## `geom_smooth()` using formula = &#39;y ~ x&#39;</code></pre>
+<pre><code>## Warning: Removed 843 rows containing non-finite outside the scale range
+## (`stat_smooth()`).</code></pre>
+<p><img src="p10_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
+<p>Mites. Mites. Mites.</p>
+<p>I would be curious to see current data and how it fits into these
+trends.</p>
+<p>Here is a picture of one of my queens, Beatrice (they are elusive).
+The dot you see on her back is paint - queens are marked in accordance
+with a color code to know which year they hatched and presumably mated
+so you have an estimate of their age.</p>
+<p>The queen for my other hive, Bhramari, was very fast and I never got
+a picture of her, but she was all black and very pretty.</p>
+<p>(C:/Users/crawl/OneDrive%20-%20Wake%20Forest%20University/GitHub/Portfolio/IMG_1470.PNG)</p>
+</div>
 </div>
 
 

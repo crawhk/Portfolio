@@ -101,7 +101,7 @@ colony <- colony %>%
 ```{r}
 colony_year_net <- colony %>%
   group_by(year) %>%
-  summarize(net_change = sum(net_colony_change, na.rm = TRUE))
+  summarize(net_change = sum(net_change, na.rm = TRUE))
 ```
 
 ```{r}
@@ -165,9 +165,7 @@ I would be curious to see current data and how it fits into these trends.
 
 Here is a picture of one of my queens, Beatrice (they are elusive). The dot you see on her back is paint - queens are marked in accordance with a color code to know which year they hatched and presumably mated so you have an estimate of their age. 
 
-```{r}
-![Beatrice](image_name.png)
-```
-
 The queen for my other hive, Bhramari, was very fast and I never got a picture of her, but she was all black and very pretty. 
+
+(C:/Users/crawl/OneDrive%20-%20Wake%20Forest%20University/GitHub/Portfolio/IMG_1470.PNG)
 
