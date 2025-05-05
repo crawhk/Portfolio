@@ -1,20 +1,173 @@
 ---
-title: "Portfolio 10"
+title: "Portfolio 10 - BEES "
 ---
 
-> The projects should be numbered consecutively (i.e., in the order in which you began them), and should include for each project a description of the goal, the product (computer program, hand graph, computer graph, etc.), the data, and some interpretation. Reports must be reproducible and of high quality in terms of writing, grammar, presentation, etc.
+> So - fun fact ... I am obsessed with bees. Absolutely love them, raised a couple honey bee colonies for a while... I can give you a lot of nerdy information that no one needs to know (other than apiarist). BUT, we are currently facing a national bee crisis - there has been a 60-70% loss of our bee population. The bees are in their worst state and this has been the largest loss in recorded history. Hence - I wanted to play around with this Tidy Tuesday data!
 
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed hendrerit purus ut dapibus vestibulum. Suspendisse potenti. Cras faucibus mauris in leo condimentum lobortis. Cras euismod sollicitudin augue, ut venenatis quam placerat eu. Maecenas vulputate rhoncus odio, in interdum risus malesuada gravida. Maecenas cursus sed dui sit amet lacinia. Nunc dignissim metus nec ex mattis, non rutrum urna cursus. Morbi pretium elementum purus, in aliquet libero eleifend ac. Nam finibus, ligula sed ultrices pharetra, tellus risus consequat tortor, facilisis maximus elit lectus a metus. Sed vel dictum nulla, vitae blandit turpis. Integer pulvinar tempor diam ac venenatis. Vestibulum est lacus, suscipit et ipsum nec, consectetur iaculis leo. Morbi libero lacus, scelerisque non sollicitudin vitae, accumsan sed tellus. Suspendisse quis orci tellus.
+```{r}
+library(haven)
+library(tidyr)
+library(tidyverse)
+library(ggplot2)
+```
 
+```{r}
 
-```{r, child='p10/demo.Rmd'}
+tuesdata <- tidytuesdayR::tt_load('2022-01-11')
+
+colony <- tuesdata$colony
+
+```
+
+```{r}
+stressor <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2022/2022-01-11/stressor.csv')
+
+```
+## Colony Data 
+
+### Tracking Colony losses over time 
+
+```{r}
+ggplot(colony, aes(x = as.numeric(year), y = colony_lost)) +
+  geom_point() + 
+   geom_smooth(method = "loess", se = FALSE, color = "goldenrod") +
+  labs(
+    x = "Year",
+    y = "Number of Colonies Lost",
+    title = "Colonies Lost Over Time"
+  ) +
+  theme_minimal()
+```
+From this data graph it does not appear like tehre are drastic changes in the number of colonies lost between 2015 and 2021. 
+
+### Colony health by state
+```{r}
+colony_state <- colony %>%  
+  group_by(state) %>% 
+  summarise(avg_pct_lost = mean (colony_lost_pct, na.rm = TRUE))
+```
+
+```{r}
+ggplot(colony_state, aes(x = reorder(state, avg_pct_lost), y = avg_pct_lost)) +
+  geom_col(fill = "goldenrod") +
+  coord_flip() +
+  labs(
+    x = "State",
+    y = "Average % Colonies Lost",
+    title = "Average Bee Colony Loss by State"
+  ) +
+  theme_minimal() +  
+  theme(
+    axis.text.y = element_text(size = 6, margin = margin(r = 5)),
+    plot.title = element_text(hjust = 0.3)
+  )
+```
+It looks like Kansas is responsible for the largest percentage of colonies lost - though this may be attributable to a large bee population due to the agricultural nature of the state or perhaps the large amount of pesticides used for said agriculture may be the cause of the problem... 
+
+New Jersey is doing pretty well. 
+
+### Seasonal Impact
+
+```{r}
+colony_month <- colony %>%
+  group_by(months) %>%
+  summarize(total_colony_lost = sum(colony_lost, na.rm = TRUE))
+```
+
+```{r}
+ggplot(colony_month, aes(x = months, y = total_colony_lost)) +
+  geom_col(fill = "goldenrod") +
+  coord_flip() +
+  labs(
+    x = "Month",
+    y = "Colonies Lost",
+    title = "Colony Loss by Month"
+  ) +
+  theme_minimal() 
+  
+```
+
+It appears that the most colonies are lost in the colder months Oct - March, as would be expected. There are many reasons colonies do not make it through the winter including starvation, freezing to death, and pests. Jan-March is when the most losses are seen. 
+
+### Colony Net Change 
+```{r}
+colony <- colony %>%
+  mutate(net_change = colony_added + colony_reno - colony_lost)
+
 ```
 
 
-Aliquam sed ex et lorem consequat feugiat at porta leo. Fusce id hendrerit tellus. Maecenas dictum felis neque, quis dictum metus tristique eu. Vivamus sed blandit nisl. Integer ut urna dolor. Cras in egestas eros, in aliquam nisi. Duis vitae elementum quam. Vivamus vel turpis commodo, porttitor urna vitae, viverra sem. Nam nec dignissim erat, id viverra libero. Integer vel lectus pellentesque tortor fringilla posuere. Vivamus quis magna accumsan, porta tortor at, aliquam urna. Aliquam vestibulum ante massa, ut gravida lectus sagittis vitae.
+```{r}
+colony_year_net <- colony %>%
+  group_by(year) %>%
+  summarize(net_change = sum(net_colony_change, na.rm = TRUE))
+```
 
-Sed eget ipsum auctor, gravida magna sit amet, tincidunt mi. Nulla erat ante, volutpat nec sem eget, luctus posuere est. Praesent convallis nunc ac turpis bibendum, in maximus magna convallis. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Sed sit amet nulla ante. Sed elit sem, lobortis nec nisi a, rhoncus ornare nunc. Curabitur ultrices neque feugiat, facilisis magna eu, consectetur magna. Mauris id eleifend ex.
+```{r}
 
-Morbi tincidunt mollis odio sit amet feugiat. Ut vel risus eu ante dictum consequat. Integer et luctus mauris. Donec nec faucibus urna, sed commodo risus. Nam elementum pulvinar erat, eget convallis est blandit vel. Etiam gravida sapien eu massa hendrerit maximus. Proin dolor quam, porta vitae libero non, venenatis porta tellus. Vivamus et elit a est aliquet consequat. Proin tempus, purus quis suscipit placerat, dui nunc euismod dui, sit amet luctus leo lectus in risus. Phasellus consectetur eleifend arcu. Nullam venenatis blandit nulla ut ullamcorper. Vestibulum eu arcu quis massa scelerisque sodales in ac augue. Quisque dapibus fringilla turpis, ut cursus tortor cursus sed. Sed facilisis quam eget neque viverra venenatis. Suspendisse ut lorem nec erat elementum bibendum. Curabitur lobortis purus in cursus blandit.
+ggplot(colony_year_net, aes(x = as.numeric(year), y = net_change)) +
+  geom_point() + 
+  geom_line(color = "goldenrod") +
+  labs(x = "Year",
+    y = "Net Change in Colonies",
+    title = "Yearly Net Change in Bee Colonies"
+  ) +
+  theme_minimal()
+
+```
+
+Looking at the net change 2017 was a poor year for the bees but 2019 was a pretty good year. From this graph it looks like bee losses have decreased from 2020 on ... however that is far from what we are seeing now. 
+
+## Stressor Data 
+
+### Common Stressors 
+
+```{r}
+stress_sum <- stressor %>%  
+  group_by(stressor) %>% 
+  summarize(avg_stress = mean(stress_pct, na.rm = TRUE)) %>% 
+  arrange(desc(avg_stress))
+```
+
+```{r}
+ggplot(stress_sum, aes(x = reorder(stressor, avg_stress), y = avg_stress)) +
+  geom_col(fill = "goldenrod") +
+  coord_flip() +
+  labs(title = "Average % of Colonies Affected by Stressor",
+       x = "Stressor", y = "Average % Affected") +
+  theme_minimal()
+```
+Varroa mites are horrible - based on first hand account they cause CCD (colony collapse disorder) all the time. They are hard to detect, treat, spread like wild fire, and tear apart hives. Just in case you were wondering - a lot of bee keepers put bees in powdered sugar to see if they have mites. I would not be surprised if the mites have become an increasingly larger issue. 
+
+### Stressors Over Time 
+
+```{r}
+stressor$year <- as.numeric(stressor$year)
+```
+
+```{r}
+
+ggplot(stressor, aes(x = year, y = stress_pct, color = stressor)) +
+  geom_smooth(se = FALSE, method = "loess") +
+  labs(
+    title = "Trends in Bee Colony Stressors Over Time",
+    x = "Year",
+    y = "% of Colonies Affected",
+    color = "Stressor"
+  ) +
+  theme_minimal()
+```
+
+Mites. Mites. Mites.
+
+I would be curious to see current data and how it fits into these trends. 
+
+Here is a picture of one of my queens, Beatrice (they are elusive). The dot you see on her back is paint - queens are marked in accordance with a color code to know which year they hatched and presumably mated so you have an estimate of their age. 
+
+```{r}
+![Beatrice](image_name.png)
+```
+
+The queen for my other hive, Bhramari, was very fast and I never got a picture of her, but she was all black and very pretty. 
 
