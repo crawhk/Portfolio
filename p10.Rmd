@@ -167,8 +167,6 @@ Here is a picture of one of my queens, Beatrice (they are elusive). The dot you 
 
 The queen for my other hive, Bhramari, was very fast and I never got a picture of her, but she was all black and very pretty. 
 
-C:/Users/crawl/OneDrive - Wake Forest University/GitHub/Portfolio/images/IMG_1470.PNG
-
-![Beatrice](images/IMG_1470.PNG)
+![Beatrice](IMG_1470.PNG)
 
 
