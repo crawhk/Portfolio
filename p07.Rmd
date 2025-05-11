@@ -3,7 +3,7 @@ title: "Portfolio 7 - Coffee Tidy Tues"
 ---
 
 > The goal of this project is to explore the Great American Coffee Tasting data set from Tidy Tuesday.
-
+ 
 ```{r}
 library(tidytuesdayR)
 ```

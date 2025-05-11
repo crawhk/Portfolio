@@ -4,6 +4,7 @@ title: "Portfolio 6 - Thesis Moderation"
 
 > For my thesis, I conducted a multi-level moderation. I originally did all of my anaylses in SPSS. However, I could not graph it correctly in SPSS. The goal here is to attempt (I am unsure of the success of this venture) to run this analysis and graph it in R. 
 
+
 ```{r}
 library(haven)
 library(tidyr)

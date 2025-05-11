@@ -16,7 +16,6 @@ library(tidyverse)
 Thesis <- read_spss("C:/Users/crawl/OneDrive - Wake Forest University/GitHub/Portfolio/ThesisAllDataNewNew.sav")
 ```
 
-
 ### Hypothesis 1 
 > Lying, AV, OV 
 

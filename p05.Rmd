@@ -3,7 +3,7 @@ title: "Portfolio 5 - Pixar Films"
 ---
 
 > The goal here is to explore the Pixar Films data from TidyTuesday and see if I can find anything of interest. 
-
+ 
 ```{r}
 ##install.packages("pixarfilms")
 ```
