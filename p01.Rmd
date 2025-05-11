@@ -1,5 +1,5 @@
 ---
-title: "Portfolio 1: Improving R Fluency"
+title: "Portfolio 1 - Improving R Fluency"
 ---
 
 # Project Description 

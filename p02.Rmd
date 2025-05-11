@@ -1,5 +1,5 @@
 ---
-title: "Portfolio 2: TComm AI Graph"
+title: "Portfolio 2 - TComm AI Graph"
 ---
 
 > The goal of this project is to create a graph for my AI research. Specifically, the graph will display our results for our QCV Truthful Communication Scale Validation project. The graph should replicate a line graph created by Mike that has predictions (correlations) along the y-axis and the criterion variables on the x-axis. I will use this graph in my poster at an upcoming conference! 
@@ -14,10 +14,10 @@ library(haven)
 library(tidyr)
 library(tidyverse)
 ```
-
+"C:\Users\crawl\OneDrive - Wake Forest University\GitHub\Portfolio\TComm AI & Human SS (Names and No Names).sav"
 
 ```{r reading data}
-AI <- read_spss("C:/Users/crawhk23/Documents/GitHub/Portfolio/DT Lie Scenario Data.sav")
+AI <- read_spss("C:/Users/crawl/OneDrive - Wake Forest University/GitHub/Portfolio/TComm AI & Human SS (Names and No Names).sav")
 ```
 
 ```{r}
