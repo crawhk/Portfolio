@@ -20,6 +20,7 @@ library(tidyverse)
 AI <- read_spss("C:/Users/crawl/OneDrive - Wake Forest University/GitHub/Portfolio/TComm AI & Human SS (Names and No Names).sav")
 ```
 
+
 ```{r}
 print(AI)
 ```
