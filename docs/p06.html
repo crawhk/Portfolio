@@ -11,9 +11,9 @@
 
 
 
-<title>Portfolio 6</title>
+<title>Portfolio 6 - Thesis Moderation</title>
 
-<script src="site_libs/header-attrs-2.13/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.29/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
@@ -141,11 +141,15 @@ $(document).ready(function () {
     href = "index.html";
   var menuAnchor = $('a[href="' + href + '"]');
 
-  // mark it active
-  menuAnchor.tab('show');
-
-  // if it's got a parent navbar menu mark it active as well
-  menuAnchor.closest('li.dropdown').addClass('active');
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
 
   // Navbar adjustments
   var navHeight = $(".navbar").first().height() + 15;
@@ -174,8 +178,8 @@ $(document).ready(function () {
   border-radius: 4px;
 }
 
-.tabset-dropdown > .nav-tabs > li.active:before {
-  content: "";
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
   font-family: 'Glyphicons Halflings';
   display: inline-block;
   padding: 10px;
@@ -183,16 +187,9 @@ $(document).ready(function () {
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
-  content: "&#xe258;";
-  border: none;
-}
-
-.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
-  content: "";
+  content: "\e258";
   font-family: 'Glyphicons Halflings';
-  display: inline-block;
-  padding: 10px;
-  border-right: 1px solid #ddd;
+  border: none;
 }
 
 .tabset-dropdown > .nav-tabs > li.active {
@@ -293,18 +290,139 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">Portfolio 6</h1>
+<h1 class="title toc-ignore">Portfolio 6 - Thesis Moderation</h1>
 
 </div>
 
 
 <blockquote>
-<p>The projects should be numbered consecutively (i.e., in the order in
-which you began them), and should include for each project a description
-of the goal, the product (computer program, hand graph, computer graph,
-etc.), the data, and some interpretation. Reports must be reproducible
-and of high quality in terms of writing, grammar, presentation, etc.</p>
+<p>For my thesis, I conducted a multi-level moderation. I originally did
+all of my anaylses in SPSS. However, I could not graph it correctly in
+SPSS. The goal here is to attempt (I am unsure of the success of this
+venture) to run this analysis and graph it in R.</p>
 </blockquote>
+<pre class="r"><code>library(haven)
+library(tidyr)
+library(tidyverse)</code></pre>
+<pre><code>## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+## ✔ dplyr     1.1.4     ✔ purrr     1.0.4
+## ✔ forcats   1.0.0     ✔ readr     2.1.5
+## ✔ ggplot2   3.5.2     ✔ stringr   1.5.1
+## ✔ lubridate 1.9.4     ✔ tibble    3.2.1
+## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+## ✖ dplyr::filter() masks stats::filter()
+## ✖ dplyr::lag()    masks stats::lag()
+## ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+<pre class="r"><code>ThesisMod &lt;- read_spss(&quot;C:/Users/crawl/OneDrive - Wake Forest University/GitHub/Portfolio/DT Lie Scenario Data.sav&quot;)</code></pre>
+<pre class="r"><code>library(lme4)</code></pre>
+<pre><code>## Loading required package: Matrix</code></pre>
+<pre><code>## 
+## Attaching package: &#39;Matrix&#39;</code></pre>
+<pre><code>## The following objects are masked from &#39;package:tidyr&#39;:
+## 
+##     expand, pack, unpack</code></pre>
+<pre class="r"><code>library(lmerTest)</code></pre>
+<pre><code>## 
+## Attaching package: &#39;lmerTest&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:lme4&#39;:
+## 
+##     lmer</code></pre>
+<pre><code>## The following object is masked from &#39;package:stats&#39;:
+## 
+##     step</code></pre>
+<pre class="r"><code>model &lt;- lmer(LieAvg ~ DTTotalC * Scenario 
+              + (1 | Person), data = ThesisMod)
+summary(model)</code></pre>
+<pre><code>## Linear mixed model fit by REML. t-tests use Satterthwaite&#39;s method [
+## lmerModLmerTest]
+## Formula: LieAvg ~ DTTotalC * Scenario + (1 | Person)
+##    Data: ThesisMod
+## 
+## REML criterion at convergence: 1639.8
+## 
+## Scaled residuals: 
+##     Min      1Q  Median      3Q     Max 
+## -1.6111 -0.3901 -0.1134  0.5007  5.0869 
+## 
+## Random effects:
+##  Groups   Name        Variance Std.Dev.
+##  Person   (Intercept) 0.03457  0.1859  
+##  Residual             0.25517  0.5051  
+## Number of obs: 1020, groups:  Person, 510
+## 
+## Fixed effects:
+##                     Estimate Std. Error         df t value Pr(&gt;|t|)    
+## (Intercept)          1.69412    0.02384 1001.73948  71.076   &lt;2e-16 ***
+## DTTotalC             0.09662    0.04578 1001.73948   2.110   0.0351 *  
+## Scenario            -0.60294    0.03163  507.99998 -19.060   &lt;2e-16 ***
+## DTTotalC:Scenario    0.06523    0.06076  507.99998   1.073   0.2836    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Correlation of Fixed Effects:
+##             (Intr) DTTtlC Scenar
+## DTTotalC     0.000              
+## Scenario    -0.664  0.000       
+## DTTtlC:Scnr  0.000 -0.664  0.000</code></pre>
+<p>I got the same results in SPSS for my thesis! That was expected, now
+I would like to graph this… which would have come in handy weeks ago,
+but we were limited on time.</p>
+<pre class="r"><code>library(ggeffects)
+library(ggplot2)</code></pre>
+<pre class="r"><code># Generate predicted values from model
+pred &lt;- ggpredict(model, terms = c(&quot;DTTotalC&quot;, &quot;Scenario&quot;))</code></pre>
+<pre class="r"><code>ggplot(pred, aes(x = x, y = predicted, color = group)) +
+  geom_line(size = 1) +
+  labs(x = &quot;Dark Triad&quot;, 
+       y = &quot;Predicted Lying&quot;, 
+       color = &quot;Scenario&quot;, 
+       fill = &quot;Scenario&quot;, 
+       title = &quot;DT–Lying Relationship Moderated by Scenario&quot;)</code></pre>
+<pre><code>## Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
+## ℹ Please use `linewidth` instead.
+## This warning is displayed once every 8 hours.
+## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
+## generated.</code></pre>
+<p><img src="p06_files/figure-html/unnamed-chunk-7-1.png" width="672" />
+These lines look to be relatively parallel, though not perfect. I am
+curious as to if a sample had very high levels of DT traits if this
+moderation would be different.</p>
+<p>Here is my data mapped on to the prediciton lines.</p>
+<pre class="r"><code>ggplot(pred, aes(x = x, y = predicted, color = group)) +
+  geom_line(size = 1) +
+  geom_jitter(data = ThesisMod, aes(x = DTTotalC, y = LieAvg, color = as.factor(Scenario)), 
+             alpha = 0.3, size = 1.5, inherit.aes = FALSE) + 
+  labs(x = &quot;Dark Triad&quot;, 
+       y = &quot;Predicted Lying&quot;, 
+       color = &quot;Scenario&quot;, 
+       fill = &quot;Scenario&quot;, 
+       title = &quot;DT–Lying Relationship Moderated by Scenario&quot;)</code></pre>
+<p><img src="p06_files/figure-html/unnamed-chunk-8-1.png" width="672" />
+It appears that there is more variability in lying in the romantic
+partner scenario (0) which is what I saw in my box and wisker plot in my
+thesis!</p>
+<pre class="r"><code>pred1 &lt;- ggpredict(model, terms = c(&quot;DTTotalC [-5:5 by=0.1]&quot;, &quot;Scenario&quot;))
+
+ggplot(pred1, aes(x = x, y = predicted, color = group)) +
+  geom_line(size = 1.2) +
+  labs(x = &quot;Dark Triad&quot;, 
+       y = &quot;Predicted Lying&quot;, 
+       color = &quot;Scenario&quot;, 
+       title = &quot;DT–Lying Relationship Moderated by Scenario&quot;) </code></pre>
+<p><img src="p06_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<p>It certainly seems that at higher levels of the DT traits - there is
+convergence between the lines…</p>
+<pre class="r"><code>pred2 &lt;- ggpredict(model, terms = c(&quot;DTTotalC [-10:10 by=0.1]&quot;, &quot;Scenario&quot;))
+
+ggplot(pred2, aes(x = x, y = predicted, color = group)) +
+  geom_line(size = 1.2) +
+  labs(x = &quot;Dark Triad&quot;, 
+       y = &quot;Predicted Lying&quot;, 
+       color = &quot;Scenario&quot;, 
+       title = &quot;DT–Lying Relationship Moderated by Scenario&quot;) </code></pre>
+<p><img src="p06_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<p>Aroung a DT score of 8.5 there is an interaction of scenario… too bad
+that my scale is only 1-5 :(</p>
 
 
 

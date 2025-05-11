@@ -20,6 +20,7 @@ library(tidyverse)
 library(cluster)
 library(dplyr)
 library(ggplot2)
+library(nnet)
 ```
 
 Let's see if coffee drinking habits vary by a variety of factors including: gender, employment status, education, number of children, political affiliation, and ethnicity. 

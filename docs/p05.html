@@ -11,9 +11,9 @@
 
 
 
-<title>Portfolio 5</title>
+<title>Portfolio 5 - Pixar Films</title>
 
-<script src="site_libs/header-attrs-2.13/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.29/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
@@ -141,11 +141,15 @@ $(document).ready(function () {
     href = "index.html";
   var menuAnchor = $('a[href="' + href + '"]');
 
-  // mark it active
-  menuAnchor.tab('show');
-
-  // if it's got a parent navbar menu mark it active as well
-  menuAnchor.closest('li.dropdown').addClass('active');
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
 
   // Navbar adjustments
   var navHeight = $(".navbar").first().height() + 15;
@@ -174,8 +178,8 @@ $(document).ready(function () {
   border-radius: 4px;
 }
 
-.tabset-dropdown > .nav-tabs > li.active:before {
-  content: "";
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
   font-family: 'Glyphicons Halflings';
   display: inline-block;
   padding: 10px;
@@ -183,16 +187,9 @@ $(document).ready(function () {
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
-  content: "&#xe258;";
-  border: none;
-}
-
-.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
-  content: "";
+  content: "\e258";
   font-family: 'Glyphicons Halflings';
-  display: inline-block;
-  padding: 10px;
-  border-right: 1px solid #ddd;
+  border: none;
 }
 
 .tabset-dropdown > .nav-tabs > li.active {
@@ -293,18 +290,151 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">Portfolio 5</h1>
+<h1 class="title toc-ignore">Portfolio 5 - Pixar Films</h1>
 
 </div>
 
 
 <blockquote>
-<p>The projects should be numbered consecutively (i.e., in the order in
-which you began them), and should include for each project a description
-of the goal, the product (computer program, hand graph, computer graph,
-etc.), the data, and some interpretation. Reports must be reproducible
-and of high quality in terms of writing, grammar, presentation, etc.</p>
+<p>The goal here is to explore the Pixar Films data from TidyTuesday and
+see if I can find anything of interest.</p>
 </blockquote>
+<pre class="r"><code>##install.packages(&quot;pixarfilms&quot;)</code></pre>
+<pre class="r"><code>library(&quot;pixarfilms&quot;)
+library(tidyr)
+library(dplyr)</code></pre>
+<pre><code>## 
+## Attaching package: &#39;dplyr&#39;</code></pre>
+<pre><code>## The following objects are masked from &#39;package:stats&#39;:
+## 
+##     filter, lag</code></pre>
+<pre><code>## The following objects are masked from &#39;package:base&#39;:
+## 
+##     intersect, setdiff, setequal, union</code></pre>
+<pre class="r"><code>pixar &lt;- pixar_films</code></pre>
+<div id="runtime-trends" class="section level2">
+<h2>Runtime Trends</h2>
+<pre class="r"><code>mean(pixar$run_time, na.rm = TRUE)</code></pre>
+<pre><code>## [1] 104.84</code></pre>
+<p>The average runtime for a Pixar film is around 105 minutes - how has
+that changed over time?</p>
+<pre class="r"><code>library(ggplot2)</code></pre>
+<pre class="r"><code>pixar %&gt;%  
+  ggplot(aes(x = release_date, y = run_time)) +
+  geom_line() +
+  geom_point() +
+  labs(title = &quot;Pixar Film Runtimes Over Time&quot;, x = &quot;Year&quot;, y = &quot;Run Time &quot;)</code></pre>
+<pre><code>## Warning: Removed 2 rows containing missing values or values outside the scale range
+## (`geom_point()`).</code></pre>
+<p><img src="p05_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p>It appears that there was a large spike shortly after 2021 - I am
+curious to know which movie had such a long run time.</p>
+<pre class="r"><code>ggplot(pixar, aes(x = reorder(film, run_time), y = run_time)) +
+  geom_col() +
+  coord_flip() +
+  labs(title = &quot;Pixar Film Runtimes&quot;, x = &quot;Film&quot;, y = &quot;Run Time&quot;)</code></pre>
+<pre><code>## Warning: Removed 2 rows containing missing values or values outside the scale range
+## (`geom_col()`).</code></pre>
+<p><img src="p05_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<pre class="r"><code>pixar[which.max(pixar$run_time), ]</code></pre>
+<pre><code>## # A tibble: 1 × 5
+##   number film  release_date run_time film_rating
+##   &lt;chr&gt;  &lt;chr&gt; &lt;date&gt;          &lt;dbl&gt; &lt;chr&gt;      
+## 1 27     &lt;NA&gt;  2023-06-16        155 Not Rated</code></pre>
+<pre class="r"><code>pixar[which.min(pixar$run_time), ]</code></pre>
+<pre><code>## # A tibble: 1 × 5
+##   number film      release_date run_time film_rating
+##   &lt;chr&gt;  &lt;chr&gt;     &lt;date&gt;          &lt;dbl&gt; &lt;chr&gt;      
+## 1 1      Toy Story 1995-11-22         81 G</code></pre>
+<p>Apparently Luca has an extremely long run time, compared to the other
+Pixar films… perhaps I have to watch it now…</p>
+<p>Toy Story has the shortest run time - remains superior though…</p>
+</div>
+<div id="rating-trends" class="section level2">
+<h2>Rating Trends</h2>
+<p>Let’s see how run time varies by rating</p>
+<pre class="r"><code>pixar %&gt;%
+  group_by(film_rating) %&gt;%
+  summarise(mean_runtime = mean(run_time), count = n())</code></pre>
+<pre><code>## # A tibble: 4 × 3
+##   film_rating mean_runtime count
+##   &lt;chr&gt;              &lt;dbl&gt; &lt;int&gt;
+## 1 G                   100.    13
+## 2 N/A                  NA      3
+## 3 Not Rated           155      1
+## 4 PG                  101.    10</code></pre>
+<p>The majority of the movies are G rated and have an average run time
+of around 100 mins followed by PG rated moves with a similar run time
+(avg of 101). Not extremely surprised by these results. Let’s plot this
+…</p>
+<pre class="r"><code>pixar %&gt;%  
+  ggplot(aes(x = film_rating, fill = film_rating)) +
+  geom_bar() +
+  labs(title = &quot;Distribution of Film Ratings&quot;, x = &quot;Rating&quot;, y = &quot;Count&quot;)</code></pre>
+<p><img src="p05_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<p>I am curious to know if ratings have become “less restrictive” or
+rather if more movies have been made recently that have more “severe”
+ratings</p>
+<pre class="r"><code>pixar %&gt;%  
+  ggplot(aes(x = release_date, y = film_rating, color = film_rating)) +
+  geom_point() +
+  labs(title = &quot;Pixar Film Runtimes Over Time&quot;, x = &quot;Release Date&quot;, y = &quot;Film Rating&quot;)</code></pre>
+<p><img src="p05_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+<p>Not particularly informative, but it does look like most early films
+were G rated where as around 2005 it looks like PG movies were
+introduced.</p>
+</div>
+<div id="years-since-release" class="section level2">
+<h2>Years Since Release</h2>
+<pre class="r"><code>library(lubridate)</code></pre>
+<pre><code>## 
+## Attaching package: &#39;lubridate&#39;</code></pre>
+<pre><code>## The following objects are masked from &#39;package:base&#39;:
+## 
+##     date, intersect, setdiff, union</code></pre>
+<pre class="r"><code>pixarnew &lt;- pixar %&gt;%
+  mutate(years_since_release = year(Sys.Date()) -  year(release_date))</code></pre>
+<pre class="r"><code>pixarnew %&gt;%
+  group_by(film_rating) %&gt;%
+  summarise(mean_years_old = mean(years_since_release, na.rm = TRUE))</code></pre>
+<pre><code>## # A tibble: 4 × 2
+##   film_rating mean_years_old
+##   &lt;chr&gt;                &lt;dbl&gt;
+## 1 G                    18.3 
+## 2 N/A                   3.33
+## 3 Not Rated             2   
+## 4 PG                   10.4</code></pre>
+<p>The G rated films on average tend to be older than the PG rated
+films.</p>
+<p>Let’s see if films are getting shorter or longer…</p>
+<pre class="r"><code>ggplot(pixarnew, aes(x = years_since_release, y = run_time)) +
+  geom_point() +
+  geom_smooth(method = &quot;lm&quot;, se = FALSE) +
+  labs(title = &quot;Do Pixar Films Get Longer Over Time?&quot;, y = &quot;RunTime&quot;, x = &quot;Years Since Release&quot;)</code></pre>
+<pre><code>## `geom_smooth()` using formula = &#39;y ~ x&#39;</code></pre>
+<pre><code>## Warning: Removed 2 rows containing non-finite outside the scale range
+## (`stat_smooth()`).</code></pre>
+<pre><code>## Warning: Removed 2 rows containing missing values or values outside the scale range
+## (`geom_point()`).</code></pre>
+<p><img src="p05_files/figure-html/unnamed-chunk-15-1.png" width="672" />
+It looks like no - Pixar films have not gotten longer over time, rather
+more recent movies appear to be longer, but I am curious to see this
+without the two “outliers”</p>
+<pre class="r"><code>pixarfilter &lt;- pixarnew %&gt;%  
+  filter(run_time &lt; 130)</code></pre>
+<pre class="r"><code>ggplot(pixarfilter, aes(x = years_since_release, y = run_time)) +
+  geom_point() +
+  geom_smooth(method = &quot;lm&quot;, se = FALSE) +
+  labs(title = &quot;Do Pixar Films Get Longer Over Time?&quot;, y = &quot;RunTime&quot;, x = &quot;Years Since Release&quot;)</code></pre>
+<pre><code>## `geom_smooth()` using formula = &#39;y ~ x&#39;</code></pre>
+<p><img src="p05_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
+<p>Still appears to be a negative relationship!</p>
+<p>Overall, I think this was a fun little experiment. However, I was
+hoping that there was going to be more to the data like info about
+characters(male/female/other? animal/human? princess? etc.), themes of
+plots, viewer ratings, directors, or funding. Nevertheless, explored the
+data and made some cool graphs!</p>
+</div>
 
 
 

@@ -8,6 +8,7 @@ title: "Portfolio 8 - Thesis EVT Correlations"
 library(haven)
 library(tidyr)
 library(tidyverse)
+
 ```
 
 "C:\Users\crawl\OneDrive - Wake Forest University\GitHub\Portfolio\ThesisAllDataNewNew.sav"
@@ -23,7 +24,7 @@ Thesis <- read_spss("C:/Users/crawl/OneDrive - Wake Forest University/GitHub/Por
   cor.test(Thesis$RPLieAvg, Thesis$RP_AV, method = "pearson")
 ```
 ```{r}
-library(ggplot)
+library(ggplot2)
 ```
 
 ```{r}
